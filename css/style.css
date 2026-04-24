@@ -1,0 +1,164 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    /* lighness [0, 1], chroma (saturation) [0, 0.4], hue [0°, 360°]*/
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/oklch */
+    --bg-dark: oklch(0.1 0 0);
+    --bg: oklch(0.1548 0.0021 286.15);
+    --bg-light: oklch(0.2578 0.0074 285.87);
+
+    --text: oklch(0.96 0 0);
+    --text-muted: oklch(0.76 0 0);
+    --highlight: oklch(0.5 0 0);
+
+    --border: oklch(0.4 0 0);
+    --border-muted: oklch(0.3 0 0);
+
+
+    --primary: oklch(0.76 0.1 307);
+    --secondary: oklch(0.76 0.1 127);
+    --danger: oklch(0.7 0.05 30);
+    --warning: oklch(0.7 0.05 100);
+    --success: oklch(0.7 0.05 160);
+    --info: oklch(0.7 0.05 260);
+}
+
+body.light {
+    /*     light mode css variables */
+}
+
+body {
+    background-color: var(--bg);
+}
+
+/*╔══════════════════════════════════════════════════════════╗*/
+/*║                        Canvasses                         ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
+#background-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+}
+
+#fps {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: white;
+    padding: 0.2rem;
+}
+
+/*╔══════════════════════════════════════════════════════════╗*/
+/*║                        Canvasses                         ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
+#cursor {
+    position: absolute;
+    pointer-events: none;
+
+    top: 0;
+    left: 0;
+
+    background-color: red;
+    width: 4rem;
+    height: 3rem;
+    z-index: 10;
+
+    transform-origin: right center;
+
+    /* transition: all 0.5s; */
+}
+
+/* .c2 {
+    z-index: 11;
+}
+
+.c2:hover {
+    background-color: rgba(255, 0, 0, 0.5);
+    transform: rotate(45deg) translateX(-50%);
+} */
+
+/* #cursor:hover {
+    transform: translateX(-50%) rotate(45deg);
+} */
+
+/* #cursor:active {
+    background-color: blue;
+} */
+
+#cursor::before {
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    background-color: green;
+    position: absolute;
+    top: 1rem;
+    left: 3rem;
+}
+
+#vis {
+    --r: 2rem;
+    width: var(--r);
+    height: var(--r);
+    background-color: rgba(255, 255, 0, 0.5);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 20;
+}
+
+
+
+
+
+/* TEST */
+#clickable-chaser{
+    background-color: aqua;
+    position: absolute;
+    z-index: 8;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.clickable {
+    background-color: var(--bg-light);
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+}
+
+#c0 {
+    width: 20rem;
+    height: 10rem;
+    top: 1rem;
+    left: 15rem;
+}
+
+#c1 {
+    width: 10rem;
+    height: 8rem;
+    top: 20rem;
+    left: 5rem;
+}
+
+#c2 {
+    width: 15rem;
+    height: 14rem;
+    top: 15rem;
+    left: 50rem;
+}
+
+#c3 {
+    width: 13rem;
+    height: 9rem;
+    top: 40rem;
+    left: 30rem;
+}
