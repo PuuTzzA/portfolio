@@ -1,46 +1,61 @@
-import { SdfCanvas } from "../sdf-ui/src/scripts/sdf-ui.js";
+import { SdfCanvas, SdfLayer, SdfCommands } from "../sdf-ui/src/scripts/sdf-ui.js";
 import { SpringlikeProperty, Chaser } from "./chaser.js";
 import { TimeAverage } from "./time-average.js";
 
 const CAMERA_Z = 10;
 const REM_PX = parseFloat(getComputedStyle(document.documentElement).fontSize);
+const FOCUSABLE_CLASSNAME = "focusable";
+const COMPILING_CLASSNAME = "compiling";
+const NO_SDF_CLASSNAME = "no-sdf";
 
+SdfCanvas.layers = [new SdfLayer(SdfCommands.SMOOTH_UNION, 10)];
 SdfCanvas.customElements = [];
 const loadStartTime = performance.now();
 
 const backgroundCanvas = new SdfCanvas("background-canvas", {
     renderLayers: [0],
-    downscaleFactorX: 1,
-    downscaleFactorY: 10,
+    downscaleFactorX: 2,
+    downscaleFactorY: REM_PX,
     topFace: false,
     cameraZ: CAMERA_Z,
     useAA: false,
-    twoDMode: true,
+    twoDMode: false,
     customShadeFunction: "",
     onCompilationComplete: () => {
         const loadTime = performance.now() - loadStartTime;
-        console.log("compiled in: " + (loadTime / 60000).toFixed(4) + " minutes, (" + loadTime.toFixed(4) + "ms)")
+        console.log("compiled in: " + (loadTime / 60000).toFixed(4) + " minutes, (" + loadTime.toFixed(4) + "ms)");
+        SdfCanvas.performForEachElement((e) => {
+            e.classList.remove(COMPILING_CLASSNAME);
+            e.classList.remove(NO_SDF_CLASSNAME);
+        })
     }
 });
 
 const focusCanvas = new SdfCanvas("focus-canvas", {
-    renderLayers: [0],
-    downscaleFactorX: 1,
-    downscaleFactorY: 1,
+    renderLayers: [0, 1],
+    downscaleFactorX: 2,
+    downscaleFactorY: 2,
     topFace: false,
     cameraZ: CAMERA_Z,
     useAA: false,
-    twoDMode: true,
+    twoDMode: false,
     customShadeFunction: "",
     onCompilationComplete: () => {
         const loadTime = performance.now() - loadStartTime;
         console.log("compiled in: " + (loadTime / 60000).toFixed(4) + " minutes, (" + loadTime.toFixed(4) + "ms)")
+        SdfCanvas.performForEachElement((e) => {
+            e.classList.remove(COMPILING_CLASSNAME);
+            // e.classList.remove(NO_SDF_CLASSNAME);
+        })
     }
 })
 
+SdfCanvas.performForEachElement((e) => {
+    e.classList.add(COMPILING_CLASSNAME);
+})
 
-// backgroundCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
-// focusCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
+backgroundCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
+focusCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
 
 const cursor = document.getElementById("cursor");
 const cursorWidth = cursor.offsetWidth;
@@ -48,7 +63,7 @@ const cursorHeight = cursor.offsetHeight;
 const fpsDiv = document.getElementById("fps");
 const pointerCircle = document.getElementById("vis");
 
-const clickableChaserDiv = document.getElementById("clickable-chaser");
+const focusedArea = document.getElementById("focused-area");
 
 const fpsCounter = new TimeAverage(1);
 
@@ -71,9 +86,9 @@ const chaser = new Chaser({
     // Rotation settings
     shouldRotate: true,
     minDistanceThreshold: REM_PX * 0.1,
-    maxDistanceThreshold: REM_PX * 1,
+    maxDistanceThreshold: REM_PX * 2,
     minThresholdVelocity: REM_PX * 2,
-    maxThresholdVelocity: REM_PX * 10,
+    maxThresholdVelocity: REM_PX * 50,
     thresholdIntervall: 0.2,
 
     // Rotation spring
@@ -93,7 +108,7 @@ const chaser = new Chaser({
 
 let activeElement = cursor;
 
-const clickableChaser = new Chaser({
+const focusAreaChaserPos = new Chaser({
     // internal state
     x: window.innerWidth / 2,
     y: window.innerHeight / 2,
@@ -109,33 +124,33 @@ const clickableChaser = new Chaser({
 
     // Limits
     vAbsMax: 10000,
-    xMin: 0 - REM_PX,
-    xMax: window.innerWidth + REM_PX,
-    yMin: 0 - REM_PX,
-    yMax: window.innerHeight + REM_PX,
+    xMin: 0 - 100 * REM_PX,
+    xMax: window.innerWidth + 100 * REM_PX,
+    yMin: 0 - 100 * REM_PX,
+    yMax: window.innerHeight + 100 * REM_PX,
 });
 
 const sizeStiffness = 1000;
 const sizeDamping = 18;
 
-const clickableChaserX = new SpringlikeProperty({
+const focusAreaChaserWidth = new SpringlikeProperty({
     val: REM_PX,
     stiffness: sizeStiffness,
-    damping: sizeDamping,
+    damping: sizeDamping * 1.1,
     mass: 1,
     vAbsMax: 10000 * REM_PX,
     valMin: 0,
-    valMax: 100 * REM_PX,
+    valMax: 500 * REM_PX,
 })
 
-const clickableChaserY = new SpringlikeProperty({
+const focusAreaChaserHeight = new SpringlikeProperty({
     val: REM_PX,
     stiffness: sizeStiffness,
     damping: sizeDamping,
     mass: 1,
     vAbsMax: 10000 * REM_PX,
     valMin: 0,
-    valMax: 100 * REM_PX,
+    valMax: 500 * REM_PX,
 })
 
 // ╔══════════════════════════════════════════════════════════╗
@@ -143,7 +158,7 @@ const clickableChaserY = new SpringlikeProperty({
 // ╚══════════════════════════════════════════════════════════╝
 function update(time, dt) {
     fpsCounter.update(time, 1 / dt);
-    fpsDiv.innerHTML = fpsCounter.average.toFixed(1);  // show FPS with 1 decimal
+    fpsDiv.innerHTML = fpsCounter.average.toFixed(0) + " fps";  // show FPS with 1 decimal
 
     //console.log(delta)
     chaser.update(mouse, dt, time);
@@ -167,25 +182,63 @@ function update(time, dt) {
     const offsetY = (rect.top + rect.height * 0.5);
     // const offsetZ = this.twoDMode ? 0 : parseFloat(computedStyle.getPropertyValue("--z")) * oneOverX;
 
-    const width = activeElement.offsetWidth;
-    const height = activeElement.offsetHeight;
+    const width = rect.width + 5 * REM_PX;
+    const height = rect.height + 1 * REM_PX;
 
-    clickableChaserX.update(width, dt);
-    clickableChaserY.update(height, dt);
+    focusAreaChaserWidth.update(width, dt);
+    focusAreaChaserHeight.update(height, dt);
+    focusAreaChaserPos.update({ x: offsetX, y: offsetY }, dt);
 
-    clickableChaser.update({ x: offsetX, y: offsetY }, dt);
+    /*     //clickableChaserDiv.style.transform = `translate(${(mouse.x - clickableChaserX.val / 2)}px, ${(mouse.y - clickableChaserY.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
+        //clickableChaserDiv.style.transform = `translate(${(offsetX - clickableChaserX.val / 2)}px, ${(offsetY - clickableChaserY.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
+        focusedArea.style.transform = `translate(${(focusAreaChaserPos.x - focusAreaChaserWidth.val / 2)}px, ${(focusAreaChaserPos.y - focusAreaChaserHeight.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
+        focusedArea.style.width = focusAreaChaserWidth.val + "px";
+        focusedArea.style.height = focusAreaChaserHeight.val + "px";
+    
+        //console.log(getComputedStyle(cursor).transform)
+        //cursor.style.transform = `rotate(${(chaser.rotation)}rad) translateX(-50%)`;
+    
+        //cursor.style.transform = `rotate(${(Math.PI / 2 + chaser.rotation)}rad)`;
+        //cursor.style.transform = `translate(${chaser.x}px, ${chaser.y}px) rotate(${chaser.rotation}rad)`;
+     */
 
-    //clickableChaserDiv.style.transform = `translate(${(mouse.x - clickableChaserX.val / 2)}px, ${(mouse.y - clickableChaserY.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
-    //clickableChaserDiv.style.transform = `translate(${(offsetX - clickableChaserX.val / 2)}px, ${(offsetY - clickableChaserY.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
-    clickableChaserDiv.style.transform = `translate(${(clickableChaser.x - clickableChaserX.val / 2)}px, ${(clickableChaser.y - clickableChaserY.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
-    clickableChaserDiv.style.width = clickableChaserX.val + "px";
-    clickableChaserDiv.style.height = clickableChaserY.val + "px";
 
-    //console.log(getComputedStyle(cursor).transform)
-    //cursor.style.transform = `rotate(${(chaser.rotation)}rad) translateX(-50%)`;
+    backgroundCanvas.draw();
 
-    //cursor.style.transform = `rotate(${(Math.PI / 2 + chaser.rotation)}rad)`;
-    //cursor.style.transform = `translate(${chaser.x}px, ${chaser.y}px) rotate(${chaser.rotation}rad)`;
+    /*     fcc.style.width = focusAreaChaserWidth.val + "px";
+        fcc.style.height = focusAreaChaserHeight.val + "px";
+        //fcc.style.top = focusAreaChaserPos.x - focusAreaChaserWidth.val / 2 + "px";
+        //fcc.style.left = focusAreaChaserPos.y - focusAreaChaserHeight.val / 2 + "px";
+        fcc.style.transform = `translate(${(focusAreaChaserPos.x - focusAreaChaserWidth.val / 2)}px, ${(focusAreaChaserPos.y - focusAreaChaserHeight.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
+     */
+
+
+
+    const focusX = focusAreaChaserPos.x - focusAreaChaserWidth.val / 2;
+    const focusY = focusAreaChaserPos.y - focusAreaChaserHeight.val / 2;
+    const focusW = focusAreaChaserWidth.val;
+    const focusH = focusAreaChaserHeight.val;
+
+    // 2. Move the div wrapper (Optional, if you use it for CSS borders/effects)
+    focusedArea.style.transform = `translate(${focusX}px, ${focusY}px)`;
+    focusedArea.style.width = focusW + "px";
+    focusedArea.style.height = focusH + "px";
+
+    SdfCanvas.w = focusW;
+    SdfCanvas.h = focusH;
+
+    // 3. Tell the focusCanvas to draw ONLY inside the moving rectangle
+    // REMOVE focusCanvas.alskdfja() entirely!
+    focusCanvas.draw({
+        x: focusX,
+        y: focusY,
+        w: focusW,
+        h: focusH
+    });
+
+    //focusCanvas.canvas.style.transform = `translate(${(focusAreaChaserPos.x - focusAreaChaserWidth.val / 2)}px, ${(focusAreaChaserPos.y - focusAreaChaserHeight.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
+    //focusCanvas.canvas.style.width = focusAreaChaserWidth.val + "px";
+    //focusCanvas.canvas.style.height = focusAreaChaserHeight.val + "px";
 }
 
 function onResize(e) {
@@ -200,12 +253,16 @@ function onMouseMove(e) {
     mouse.y = e.clientY;
 }
 
-function onActiveEnter(e) {
-    activeElement = e.target;
-    console.log(e.target)
+function focusableOnMouseIn(e) {
+    let target = e.target;
+    while (!target.classList.contains(FOCUSABLE_CLASSNAME)) {
+        target = target.parentNode;
+    }
+
+    activeElement = target;
 }
 
-function onActiveLeave(e) {
+function focusableOnMouseOut(e) {
     // activeElement = pointerCircle;
 }
 
@@ -215,11 +272,11 @@ function onActiveLeave(e) {
 window.addEventListener('mousemove', onMouseMove);
 window.addEventListener("resize", onResize)
 onResize();
-const clickables = document.getElementsByClassName("clickable");
-for (let i = 0; i < clickables.length; i++) {
-    const clickable = clickables[i];
-    clickable.addEventListener("mouseover", onActiveEnter);
-    clickable.addEventListener("mouseout", onActiveLeave);
+const focusables = document.getElementsByClassName(FOCUSABLE_CLASSNAME);
+for (let i = 0; i < focusables.length; i++) {
+    const focusable = focusables[i];
+    focusable.addEventListener("mouseover", focusableOnMouseIn);
+    focusable.addEventListener("mouseout", focusableOnMouseOut);
 }
 
 

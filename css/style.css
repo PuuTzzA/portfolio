@@ -1,22 +1,42 @@
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: metaballs;
+    src: url(../sdf-ui/src/style/fonts/metaball.ttf);
+}
+
+@font-face {
+    font-family: monospace-font;
+    src: url(../assets/fonts/JetBrainsMono-Regular.woff2);
+}
+
+@font-face {
+    font-family: text-font;
+    src: url(../assets/fonts/Montserrat-Regular.ttf);
 }
 
 :root {
     /* lighness [0, 1], chroma (saturation) [0, 0.4], hue [0°, 360°]*/
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/oklch */
-    --bg-dark: oklch(0.1 0 0);
-    --bg: oklch(0.1548 0.0021 286.15);
-    --bg-light: oklch(0.2578 0.0074 285.87);
+    --color-bg-dark: oklch(0.1 0 0);
+    --color-bg: oklch(0.1548 0.0021 286.15);
+    --color-bg-light: oklch(0.2578 0.0074 285.87);
 
-    --text: oklch(0.96 0 0);
-    --text-muted: oklch(0.76 0 0);
-    --highlight: oklch(0.5 0 0);
+    --color-text: oklch(0.96 0 0);
+    --color-text-muted: oklch(0.76 0 0);
+    --color-highlight: oklch(0.5 0 0);
 
-    --border: oklch(0.4 0 0);
+    --color-border: oklch(0.3578 0.0074 285.87);
+
+    --border: 0.1rem solid var(--color-border);
     --border-muted: oklch(0.3 0 0);
 
+    --central-column-width: 70%;
+    --central-column-min-width: max(70%, 60rem);
 
     --primary: oklch(0.76 0.1 307);
     --secondary: oklch(0.76 0.1 127);
@@ -24,41 +44,165 @@
     --warning: oklch(0.7 0.05 100);
     --success: oklch(0.7 0.05 160);
     --info: oklch(0.7 0.05 260);
+
+
+    --text: 1rem "text-font";
+    --heading: 1.5rem "text-font";
+    --text-monospace: 1rem "monospace-font";
+
+    --size-xs: 0.2rem;
+    --size-s: 0.5rem;
+    --size-m: 1rem;
+    --size-l: 1.5rem;
+    --size-xl: 2rem;
+    --size-xxl: 4rem;
+
+    --spacing-xs: 6rem;
+    --spacing-s: 8rem;
+    --spacing-m: 16rem;
+    --spacing-l: 20rem;
+    --spacing-xl: 35rem;
+
+
+    --text-padding: var(--size-s) var(--size-l);
+    --transition-params: 0.1s cubic-bezier(0.3, 0.8, 0.2, 1.3);
+
+    --compiling-invert: 0%;
 }
 
 body.light {
     /*     light mode css variables */
+    --color-text-dark: oklch(0.1 0 0);
+    --color-text: oklch(0.1548 0.0021 286.15);
+    --color-text-light: oklch(0.2578 0.0074 285.87);
+
+    --color-bg-light: oklch(0.96 0 0);
+    --color-bg: oklch(0.76 0 0);
+    --color-bg-dark: oklch(0.5 0 0);
+
 }
 
+/*╔══════════════════════════════════════════════════════════╗*/
+/*║                     Global Styles                        ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
+a {
+    text-decoration: none;
+}
+
+button,
+.button {
+    background-color: var(--color-bg-light);
+    font: var(--text);
+    color: var(--color-text);
+    padding: var(--text-padding);
+    border-radius: var(--size-m);
+    border: var(--border);
+}
+
+sdf-box,
+sdf-text {
+    --z: 0rem;
+    --ambient-color: rgb(100, 110, 110);
+    --ambient-color: rgb(30, 30, 30);
+    --diffuse-color: var(--color-bg);
+    --specular-color: var(--color-bg);
+    --kd: 1;
+    --ka: 0.5;
+    --ks: 1;
+    --p: 10;
+    --depth: 1rem;
+}
+
+
+
 body {
-    background-color: var(--bg);
+    background-color: var(--color-bg-dark);
+}
+
+#center-column-container {
+    position: relative;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--central-column-width);
+    min-width: var(--central-column-min-width);
+    padding: 0 var(--size-xl);
 }
 
 /*╔══════════════════════════════════════════════════════════╗*/
 /*║                        Canvasses                         ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
+canvas {
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+
 #background-canvas {
-    position: absolute;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--central-column-width);
+    min-width: var(--central-column-min-width);
+
+    z-index: -1;
+    background-color: red;
+    height: 100vh;
+
+    background-color: var(--color-bg);
+    border-left: var(--border);
+    border-right: var(--border);
+}
+
+#focus-canvas {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
     z-index: 0;
+    pointer-events: none;
+}
+
+#focused-area {
+    background-color: aqua;
+    opacity: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+/*╔══════════════════════════════════════════════════════════╗*/
+/*║                      Fixed Buttons                       ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
+#fps,
+.appearance-settings-container {
+    position: fixed;
+    top: 0;
+    color: var(--color-text);
+    padding: var(--size-s);
+    font: var(--text-monospace);
 }
 
 #fps {
-    position: absolute;
-    top: 0;
     left: 0;
-    color: white;
-    padding: 0.2rem;
 }
+
+.appearance-settings-container {
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-s);
+}
+
 
 /*╔══════════════════════════════════════════════════════════╗*/
 /*║                        Canvasses                         ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
 #cursor {
-    position: absolute;
+    position: fixed;
     pointer-events: none;
 
     top: 0;
@@ -106,29 +250,127 @@ body {
     width: var(--r);
     height: var(--r);
     background-color: rgba(255, 255, 0, 0.5);
-    position: absolute;
+    position: fixed;
     transform: translate(-50%, -50%);
     border-radius: 50%;
     pointer-events: none;
     z-index: 20;
 }
 
+*.compiling {
+    border: var(--color-text-muted) var(--size-xs) solid;
+    backdrop-filter: invert(--compiling-invert);
+    background-size: var(--spacing-s);
+    background-image: url(../assets/images/compiling-background.svg);
+    background-repeat: repeat;
+}
 
 
+/*╔══════════════════════════════════════════════════════════╗*/
+/*║                         Header                           ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
+.header {
+    position: sticky;
+    top: var(--size-l);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 100;
+}
 
-
-/* TEST */
-#clickable-chaser{
-    background-color: aqua;
+#toggle-header {
     position: absolute;
-    z-index: 8;
-    top: 0;
-    left: 0;
+    right: 0;
+}
+
+#header-link-container {
+    align-items: center;
+    width: 50%;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    transition: all 0.1s;
+}
+
+.header-link-sdf-box {
+    border-radius: 1rem;
+
+    border: var(--border);
+    padding: var(--text-padding);
+
+    --diffuse-color: var(var(--color-bg-light));
+    transition: all var(--transition-params);
+
+    transition: --z 0.3s;
+}
+
+.header-link-sdf-box.no-sdf,
+.header-link-sdf-box.compiling {
+    background-color: var(--color-bg-light) !important;
+}
+
+.header-link-sdf-box:hover {
+    cursor: pointer;
+    background-color: red !important;
+}
+
+.header-link {
+    font: var(--text);
+    color: var(--color-text);
+}
+
+.show-header {
+    display: flex;
+}
+
+.hide-header {
+    display: flex;
+    opacity: 0;
     pointer-events: none;
 }
 
+.hide-header .header-link-sdf-box {
+    --z: -10rem;
+}
+
+
+/*╔══════════════════════════════════════════════════════════╗*/
+/*║                         Title                            ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
+.title {
+    position: absolute;
+    top: 50vh;
+    transform: translateY(-50%);
+
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.title-text {
+    font-size: var(--spacing-l);
+    z-index: 100;
+    padding: 0;
+    padding-left: 0.5rem;
+    text-align: center;
+    width: auto;
+}
+
+.p {}
+
+
+.title-text.no-sdf {
+    color: var(--color-text) !important;
+    background-color: blue !important;
+    opacity: 0.5;
+}
+
+
+/* TEST */
+
 .clickable {
-    background-color: var(--bg-light);
+    background-color: var(--color-bg-light);
     position: absolute;
     z-index: 0;
     top: 0;
@@ -161,4 +403,39 @@ body {
     height: 9rem;
     top: 40rem;
     left: 30rem;
+}
+
+
+.light {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.5rem;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+#light-1 {
+    background-color: white !important;
+    --diffuse-color: white;
+    top: 30rem;
+    left: 50%;
+    --z: 10rem;
+    --light-type: directional;
+    --light-direction: 1 1 -1;
+    --light-intensity: 1;
+    --light-radius: 100rem;
+}
+
+#light-2 {
+    background-color: white !important;
+    --diffuse-color: white;
+    top: 30rem;
+    left: 50%;
+    --z: 10rem;
+    --light-type: directional;
+    --light-direction: 1 -1 -1;
+    --light-intensity: 2;
+    --light-radius: 100rem;
 }

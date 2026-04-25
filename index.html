@@ -10,23 +10,54 @@
 </head>
 
 <body>
-    <!--     <canvas id="background-canvas"></canvas>
- --> <canvas id="focus-canvas"></canvas>
+    <sdf-light class="light" id="light-1" data-render-layers="0">Directional Light</sdf-light>
+    <sdf-light class="light" id="light-2" data-render-layers="1">Directional Light</sdf-light>
 
     <div id="fps">10fps</div>
 
+    <div class="appearance-settings-container">
+        <button>Theme</button>
+        <button>3D mode</button>
+    </div>
+
+    <canvas id="background-canvas" class="middle-sizing"></canvas>
+
     <div id="cursor" class="cursor c2"></div>
     <div id="vis"></div>
+    <div id="focused-area"></div>
+    <canvas id="focus-canvas"></canvas>
+
+    <sdf-box id="center-column-container" class="middle-sizing">
+        <div class="header">
+            <nav id="header-link-container" class="focusable show-header">
+                <sdf-box class="no-sdf header-link-sdf-box"> <a class="header-link" href="#about">About</a> </sdf-box>
+                <sdf-box class="no-sdf header-link-sdf-box"> <a class="header-link" href="#timeline">Timeline</a>
+                </sdf-box>
+                <sdf-box class="no-sdf header-link-sdf-box"> <a class="header-link" href="#projects">Projects</a>
+                </sdf-box>
+                <sdf-box class="no-sdf header-link-sdf-box"> <a class="header-link" href="#contact">Contact</a>
+                </sdf-box>
+            </nav>
+            <sdf-box id="toggle-header" class="focusable button material-symbols-rounded">
+                close
+            </sdf-box>
+        </div>
+
+        <div class="title">
+            <div class="focusable">
+                <sdf-text class="no-sdf title-text">thomas putzer</sdf-text>
+            </div>
+        </div>
+
+        <div style="height: 100rem;"></div>
+    </sdf-box>
 
 
-    <div id="clickable-chaser"></div>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:wght@400" rel="stylesheet" />
 
-    <div id="c0" class="clickable"> </div>
-    <div id="c1" class="clickable"> </div>
-    <div id="c2" class="clickable"> </div>
-    <div id="c3" class="clickable"> </div>
-
+    <script src="sdf-ui/src/scripts/sdf-elements.js" type="module"></script>
     <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/adaptive.js"></script>
 </body>
 
 </html>
