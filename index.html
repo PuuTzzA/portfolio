@@ -10,42 +10,71 @@
 </head>
 
 <body>
-    <sdf-light class="light" id="light-1" data-render-layers="0">Directional Light</sdf-light>
-    <sdf-light class="light" id="light-2" data-render-layers="1">Directional Light</sdf-light>
+    <sdf-light class="light" id="light-1" data-render-layers="0"></sdf-light>
+    <sdf-light class="light" id="light-2" data-render-layers="1"></sdf-light>
 
     <div id="fps">10fps</div>
 
-    <div class="appearance-settings-container">
-        <button>Theme</button>
-        <button>3D mode</button>
-    </div>
 
     <canvas id="background-canvas" class="middle-sizing"></canvas>
 
-    <div id="cursor" class="cursor c2"></div>
+    <div id="cursor"></div>
     <div id="vis"></div>
-    <div id="focused-area"></div>
+    <div id="focused-area" class="no-sdf"></div>
     <canvas id="focus-canvas"></canvas>
 
     <sdf-box id="center-column-container" class="middle-sizing">
         <div class="header">
+            <div class="appearance-settings-container focusable">
+                <sdf-box class="button-icon material-symbols-rounded">3d</sdf-box>
+                <sdf-box class="button-icon material-symbols-rounded">routine</sdf-box>
+                <sdf-box id="toggle-header" class="button-icon material-symbols-rounded">close</sdf-box>
+            </div>
+
             <nav id="header-link-container" class="focusable show-header">
-                <sdf-box class="no-sdf header-link-sdf-box"> <a class="header-link" href="#about">About</a> </sdf-box>
-                <sdf-box class="no-sdf header-link-sdf-box"> <a class="header-link" href="#timeline">Timeline</a>
+                <sdf-box class="no-sdf header-link-sdf-box">
+                    <a class="header-link" href="#about">About</a>
                 </sdf-box>
-                <sdf-box class="no-sdf header-link-sdf-box"> <a class="header-link" href="#projects">Projects</a>
+                <sdf-box class="no-sdf header-link-sdf-box">
+                    <a class="header-link" href="#timeline">Timeline</a>
                 </sdf-box>
-                <sdf-box class="no-sdf header-link-sdf-box"> <a class="header-link" href="#contact">Contact</a>
+                <sdf-box class="no-sdf header-link-sdf-box">
+                    <a class="header-link" href="#projects">Projects</a>
+                </sdf-box>
+                <sdf-box class="no-sdf header-link-sdf-box">
+                    <a class="header-link" href="#contact">Contact</a>
                 </sdf-box>
             </nav>
-            <sdf-box id="toggle-header" class="focusable button material-symbols-rounded">
-                close
-            </sdf-box>
+            <!--             <sdf-box id="toggle-header" class="focusable button-icon material-symbols-rounded">close</sdf-box>
+ -->
         </div>
 
-        <div class="title">
-            <div class="focusable">
-                <sdf-text class="no-sdf title-text">thomas putzer</sdf-text>
+        <div id="about" class="about-container">
+            <div class="about-container-inner">
+                <div>
+                    <sdf-text class="focusable no-sdf title-text">thomas putzer</sdf-text>
+                </div>
+                <div class="about-section focusable">
+                    <div class="about-section-info">
+                        <div class="main-info text">M.Sc. Student of Informatics: Games Engineering</div>
+                        <div class="personal-information-container text-muted">
+                            <div class="personal-info">
+                                <span class="material-symbols-rounded">location_on</span>Munich, Germany
+                            </div>
+                            <div class="personal-info">
+                                <span class="material-symbols-rounded">school</span>TUM
+                            </div>
+                            <div class="personal-info text-muted">
+                                <span class="material-symbols-rounded">bookmark</span>Computer Graphics & Vision
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-section-links">
+                        <div class="icon-link mail-icon" aria-label="E-Mail"></div>
+                        <div class="icon-link github-icon" aria-label="GitHub"></div>
+                        <!-- <div class="icon-link youtube-icon" aria-label="GitHub"></div> -->
+                    </div>
+                </div>
             </div>
         </div>
 

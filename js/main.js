@@ -45,17 +45,17 @@ const focusCanvas = new SdfCanvas("focus-canvas", {
         console.log("compiled in: " + (loadTime / 60000).toFixed(4) + " minutes, (" + loadTime.toFixed(4) + "ms)")
         SdfCanvas.performForEachElement((e) => {
             e.classList.remove(COMPILING_CLASSNAME);
-            // e.classList.remove(NO_SDF_CLASSNAME);
+            e.classList.remove(NO_SDF_CLASSNAME);
         })
     }
 })
 
-SdfCanvas.performForEachElement((e) => {
+/* SdfCanvas.performForEachElement((e) => {
     e.classList.add(COMPILING_CLASSNAME);
 })
 
 backgroundCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
-focusCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
+focusCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING); */
 
 const cursor = document.getElementById("cursor");
 const cursorWidth = cursor.offsetWidth;
@@ -169,9 +169,9 @@ function update(time, dt) {
 
     const velocity = Math.min(Math.max(chaser.velocity * 0.05, 10), 100);
 
-    pointerCircle.style.setProperty("--r", velocity + "px")
+    /* pointerCircle.style.setProperty("--r", velocity + "px")
     pointerCircle.style.top = mouse.y + "px";
-    pointerCircle.style.left = mouse.x + "px";
+    pointerCircle.style.left = mouse.x + "px"; */
 
     cursor.style.transform = `translate(${(chaser.x - cursorWidth)}px, ${(chaser.y - cursorHeight / 2)}px) rotate(${chaser.rotation}rad)`;
 
@@ -182,8 +182,8 @@ function update(time, dt) {
     const offsetY = (rect.top + rect.height * 0.5);
     // const offsetZ = this.twoDMode ? 0 : parseFloat(computedStyle.getPropertyValue("--z")) * oneOverX;
 
-    const width = rect.width + 5 * REM_PX;
-    const height = rect.height + 1 * REM_PX;
+    const width = rect.width; // + 5 * REM_PX;
+    const height = rect.height; //+ 1 * REM_PX;
 
     focusAreaChaserWidth.update(width, dt);
     focusAreaChaserHeight.update(height, dt);
