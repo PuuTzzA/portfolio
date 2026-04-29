@@ -12,15 +12,34 @@ SdfCanvas.layers = [new SdfLayer(SdfCommands.SMOOTH_UNION, 10)];
 SdfCanvas.customElements = [];
 const loadStartTime = performance.now();
 
+console.log(window.innerWidth)
+console.log(window.devicePixelRatio || 1)
+
+const finalWidth = 0;
+const renderedPixelSize = 3;
 const backgroundCanvas = new SdfCanvas("background-canvas", {
     renderLayers: [0],
-    downscaleFactorX: 2,
-    downscaleFactorY: REM_PX,
+    downscaleFactorX: renderedPixelSize,
+    downscaleFactorY: renderedPixelSize,
     topFace: false,
     cameraZ: CAMERA_Z,
     useAA: false,
-    twoDMode: false,
-    customShadeFunction: "",
+    twoDMode: true,
+    customShadeFunction: `
+        vec4 shade(Surface surface) {
+            // return vec4(vec3((surface.distance + 0.0005) * 100.0f), 1.0);
+            float sdfValue = (surface.distance + 0.0) * 100.0f;
+
+            ColorStop[] colors = ColorStop[](
+            //ColorStop(surface.colorDiffuse, 0.000000), ColorStop(vec3(0.0f), 1.0f));
+            ColorStop(vec3(0.0f), 0.000000), ColorStop(vec3(1.0f), 0.5), ColorStop(vec3(0.0f), 1.0f));
+            //ColorStop(vec3(0.000000f, 0.000000f, 0.015996f), 0.000000f), ColorStop(vec3(0.008023f, 0.002428f, 0.162029f), 0.300000f), ColorStop(vec3(0.590619f, 0.964686f, 0.428690f), 0.400000f), ColorStop(vec3(0.991102f, 0.031896f, 0.814847f), 0.600000f), ColorStop(vec3(1.000000f, 0.000000f, 0.001821f), 0.800000f), ColorStop(vec3(0.008023f, 0.002428f, 0.162029f), 0.900000f), ColorStop(vec3(0.000000f, 0.000000f, 0.015996f), 1.000000f));
+
+            vec3 finalColor;
+            COLOR_RAMP(colors, sdfValue, finalColor);
+            return vec4(finalColor, 1.0f);
+        }
+    `,
     onCompilationComplete: () => {
         const loadTime = performance.now() - loadStartTime;
         console.log("compiled in: " + (loadTime / 60000).toFixed(4) + " minutes, (" + loadTime.toFixed(4) + "ms)");
@@ -33,13 +52,13 @@ const backgroundCanvas = new SdfCanvas("background-canvas", {
 
 const focusCanvas = new SdfCanvas("focus-canvas", {
     renderLayers: [0, 1],
-    downscaleFactorX: 2,
-    downscaleFactorY: 2,
+    downscaleFactorX: renderedPixelSize,
+    downscaleFactorY: renderedPixelSize,
     topFace: false,
     cameraZ: CAMERA_Z,
     useAA: false,
     twoDMode: false,
-    customShadeFunction: "",
+    customShadeFunction: ``,
     onCompilationComplete: () => {
         const loadTime = performance.now() - loadStartTime;
         console.log("compiled in: " + (loadTime / 60000).toFixed(4) + " minutes, (" + loadTime.toFixed(4) + "ms)")
@@ -50,12 +69,12 @@ const focusCanvas = new SdfCanvas("focus-canvas", {
     }
 })
 
-/* SdfCanvas.performForEachElement((e) => {
+SdfCanvas.performForEachElement((e) => {
     e.classList.add(COMPILING_CLASSNAME);
 })
 
 backgroundCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
-focusCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING); */
+// focusCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
 
 const cursor = document.getElementById("cursor");
 const cursorWidth = cursor.offsetWidth;
@@ -79,14 +98,14 @@ const chaser = new Chaser({
     rotation: 0,
 
     // Position spring
-    stiffness: 300,
-    damping: 25,
+    stiffness: 210,
+    damping: 22,
     mass: 1,
 
     // Rotation settings
     shouldRotate: true,
     minDistanceThreshold: REM_PX * 0.1,
-    maxDistanceThreshold: REM_PX * 2,
+    maxDistanceThreshold: REM_PX * 3,
     minThresholdVelocity: REM_PX * 2,
     maxThresholdVelocity: REM_PX * 50,
     thresholdIntervall: 0.2,
@@ -224,16 +243,13 @@ function update(time, dt) {
     focusedArea.style.width = focusW + "px";
     focusedArea.style.height = focusH + "px";
 
-    SdfCanvas.w = focusW;
-    SdfCanvas.h = focusH;
-
     // 3. Tell the focusCanvas to draw ONLY inside the moving rectangle
     // REMOVE focusCanvas.alskdfja() entirely!
     focusCanvas.draw({
-        x: focusX,
-        y: focusY,
-        w: focusW,
-        h: focusH
+        x: focusX,//offsetX - width / 2,
+        y: focusY,//offsetY - height / 2,
+        w: focusW,//width,
+        h: focusH,//height
     });
 
     //focusCanvas.canvas.style.transform = `translate(${(focusAreaChaserPos.x - focusAreaChaserWidth.val / 2)}px, ${(focusAreaChaserPos.y - focusAreaChaserHeight.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;

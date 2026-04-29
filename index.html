@@ -19,29 +19,29 @@
     <canvas id="background-canvas" class="middle-sizing"></canvas>
 
     <div id="cursor"></div>
-    <div id="vis"></div>
+    <!-- <div id="vis"></div> -->
     <div id="focused-area" class="no-sdf"></div>
     <canvas id="focus-canvas"></canvas>
 
-    <sdf-box id="center-column-container" class="middle-sizing">
+    <sdf-box id="center-column-container" class="middle-sizing" data-render-layers="1">
         <div class="header">
-            <div class="appearance-settings-container focusable">
+            <div class="appearance-settings-container">
                 <sdf-box class="button-icon material-symbols-rounded">3d</sdf-box>
                 <sdf-box class="button-icon material-symbols-rounded">routine</sdf-box>
                 <sdf-box id="toggle-header" class="button-icon material-symbols-rounded">close</sdf-box>
             </div>
 
             <nav id="header-link-container" class="focusable show-header">
-                <sdf-box class="no-sdf header-link-sdf-box">
+                <sdf-box class="no-sdf header-link-sdf-box chip-button">
                     <a class="header-link" href="#about">About</a>
                 </sdf-box>
-                <sdf-box class="no-sdf header-link-sdf-box">
+                <sdf-box class="no-sdf header-link-sdf-box chip-button">
                     <a class="header-link" href="#timeline">Timeline</a>
                 </sdf-box>
-                <sdf-box class="no-sdf header-link-sdf-box">
+                <sdf-box class="no-sdf header-link-sdf-box chip-button">
                     <a class="header-link" href="#projects">Projects</a>
                 </sdf-box>
-                <sdf-box class="no-sdf header-link-sdf-box">
+                <sdf-box class="no-sdf header-link-sdf-box chip-button">
                     <a class="header-link" href="#contact">Contact</a>
                 </sdf-box>
             </nav>
@@ -49,8 +49,8 @@
  -->
         </div>
 
-        <div id="about" class="about-container">
-            <div class="about-container-inner">
+        <div id="about" class="content-container">
+            <div class="about-container">
                 <div>
                     <sdf-text class="focusable no-sdf title-text">thomas putzer</sdf-text>
                 </div>
@@ -58,15 +58,10 @@
                     <div class="about-section-info">
                         <div class="main-info text">M.Sc. Student of Informatics: Games Engineering</div>
                         <div class="personal-information-container text-muted">
-                            <div class="personal-info">
-                                <span class="material-symbols-rounded">location_on</span>Munich, Germany
-                            </div>
-                            <div class="personal-info">
-                                <span class="material-symbols-rounded">school</span>TUM
-                            </div>
-                            <div class="personal-info text-muted">
-                                <span class="material-symbols-rounded">bookmark</span>Computer Graphics & Vision
-                            </div>
+                            <t-span-with-icon title="" icon="location_on" content="Munich, Germany"
+                                space-between="false"></t-span-with-icon>
+                            <t-span-with-icon title="" icon="bookmark" content="Computer Simulations, Graphics & Vision"
+                                space-between="false"></t-span-with-icon>
                         </div>
                     </div>
                     <div class="about-section-links">
@@ -76,7 +71,32 @@
                     </div>
                 </div>
             </div>
+
+            <div id="timeline">
+                <div class="timeline-header focusable">
+                    <div class="timeline-header-items chip-button text timeline-selected">Education</div>
+                    <div class="timeline-header-items chip-button text">Experience</div>
+                </div>
+                <div class="timeline-content focusable">
+                    <div class="timeline-line"></div>
+
+
+                    <t-timeline-entry title="Technical Univsersity of Munich" location="Munich, Germany"
+                        from-year="2022" from-month="Sep" to-year="now" to-month="" content="M.Sc. Informatics: Games Engineering"></t-timeline-entry>
+                    <t-timeline-entry title="Technical Univsersity of Munich" location="Munich, Germany"
+                        from-year="2022" from-month="Sep" to-year="2025" to-month="Oct" content="B.Sc. Informatics: Games Engineering<br>Thesis: Higher-Order Mass- and
+                    Momentum-Conserving Advection for Fluid Simulations with Large Time Steps <br> GPA: 1.3
+                    (Best 1.0)"></t-timeline-entry>
+                    <t-timeline-entry title="Seoul National Univsersity" location="Seoul, South Korea"
+                        from-year="2024" from-month="Sep" to-year="2025" to-month="Jan" content="Exchange Semester at SNU."></t-timeline-entry>
+                    <t-timeline-entry title="Technical Secondary School Bruneck" location="Bruneck, Italy"
+                        from-year="2017" from-month="Sep" to-year="2022" to-month="Jun"
+                        content="Branch: Electronics and Electrical Engineering, with the focus being on Automation.<br>Maturità (High School Diploma): 100/100 Points"></t-timeline-entry>
+                </div>
+            </div>
+
         </div>
+
 
         <div style="height: 100rem;"></div>
     </sdf-box>
@@ -84,6 +104,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:wght@400" rel="stylesheet" />
 
+    <script src="./js/custom-elements.js"></script>
     <script src="sdf-ui/src/scripts/sdf-elements.js" type="module"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/adaptive.js"></script>
