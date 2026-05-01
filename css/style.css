@@ -227,7 +227,6 @@ canvas {
     border-right: var(--border);
 }
 
-
 @media (max-width: 1600px) {
 
     #background-canvas,

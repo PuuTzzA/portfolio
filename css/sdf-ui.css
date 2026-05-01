@@ -1,14 +1,15 @@
+sdf-sphere,
 sdf-box,
 sdf-text {
     --z: 0rem;
     --ambient-color: rgb(100, 110, 110);
     --ambient-color: white;
     --diffuse-color: var(--color-bg);
-    --diffuse-color: rgb(255, 38, 0);
+    --diffuse-color: rgb(255, 42, 0);
     --specular-color: white;
     --kd: 1;
     --ka: 0;
-    --ks: 3;
+    --ks: 1;
     --p: 500;
     --depth: 20rem;
     --extrude: 0.2rem;
@@ -21,7 +22,7 @@ sdf-text {
 }
 
 #background-box {
-    --z: -10rem;
+    --z: -12rem;
     --depth: 100rem;
     --diffuse-color: var(--color-bg);
     /* --p: 10;
@@ -30,7 +31,16 @@ sdf-text {
 
 #cursor {
     --z: 0rem;
-    --depth: 2rem;
+    --r: 5rem;
+    --depth: 1rem;
+}
+
+.header-link-sdf-box {
+    --diffuse-color: var(--color-bg-light);
+}
+
+.title-text {
+    --depth: 1rem;
 }
 
 .light {
@@ -45,7 +55,7 @@ sdf-text {
     --z: 10rem;
     --light-type: directional;
     --light-direction: 0.5 0.5 -1;
-    --light-intensity: 1;
+    --light-intensity: 0.75;
     --light-radius: 10rem;
 }
 

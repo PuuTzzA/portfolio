@@ -12,19 +12,19 @@
 
 <body>
     <sdf-light class="light" id="light-1" data-render-layers="0"></sdf-light>
-    <sdf-light class="light" id="light-2" data-render-layers="0"></sdf-light>
+    <sdf-light class="light" id="light-2" data-render-layers="1"></sdf-light>
 
     <div id="fps">10fps</div>
 
 
     <canvas id="background-canvas" class="middle-sizing"></canvas>
 
-    <sdf-box id="cursor" data-layer-index="1"></sdf-box>
+    <sdf-sphere id="cursor" data-layer-index="3" data-render-layers="0"></sdf-sphere>
     <!-- <div id="vis"></div> -->
-    <!-- <div id="focused-area" class="no-sdf"></div> -->
+    <div id="focused-area" class="no-sdf"></div>
     <canvas id="focus-canvas"></canvas>
 
-    <sdf-box id="background-box" class="middle-sizing" data-render-layers="0">
+    <sdf-box id="background-box" class="middle-sizing" data-layer-index="2" data-render-layers="1">
         <div class="header">
             <div class="appearance-settings-container">
                 <div id="toggle-header" class="button-icon material-symbols-rounded">close</div>
@@ -52,33 +52,37 @@
 
         <div id="about" class="content-container">
             <div class="about-container">
-                <div>
-                    <sdf-text class="focusable no-sdf title-text">thomas putzer</sdf-text>
-                </div>
-                <div class="about-section focusable">
-                    <div class="about-section-info">
-                        <div class="main-info text">M.Sc. Student of Informatics: Games Engineering</div>
-                        <div class="personal-information-container text-muted">
-                            <t-span-with-icon title="" icon="location_on" content="Munich, Germany"
-                                space-between="false"></t-span-with-icon>
-                            <t-span-with-icon title="" icon="bookmark" content="Computer Simulations, Graphics & Vision"
-                                space-between="false"></t-span-with-icon>
-                        </div>
+                <div class="focusable">
+                    <div>
+                        <sdf-text class="no-sdf title-text" data-layer-index="1" data-render-layers="0">thomas
+                            putzer</sdf-text>
                     </div>
-                    <div class="about-section-links">
-                        <div class="icon-link mail-icon" aria-label="E-Mail"></div>
-                        <div class="icon-link github-icon" aria-label="GitHub"></div>
-                        <!-- <div class="icon-link youtube-icon" aria-label="GitHub"></div> -->
+                    <div class="about-section">
+                        <div class="about-section-info">
+                            <div class="main-info text">M.Sc. Student of Informatics: Games Engineering</div>
+                            <div class="personal-information-container text-muted">
+                                <t-span-with-icon title="" icon="location_on" content="Munich, Germany"
+                                    space-between="false"></t-span-with-icon>
+                                <t-span-with-icon title="" icon="bookmark"
+                                    content="Computer Simulations, Graphics & Vision"
+                                    space-between="false"></t-span-with-icon>
+                            </div>
+                        </div>
+                        <div class="about-section-links">
+                            <div class="icon-link mail-icon" aria-label="E-Mail"></div>
+                            <div class="icon-link github-icon" aria-label="GitHub"></div>
+                            <!-- <div class="icon-link youtube-icon" aria-label="GitHub"></div> -->
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div id="timeline">
-                <div class="timeline-header focusable">
+            <div id="timeline" class="focusable">
+                <div class="timeline-header">
                     <div class="timeline-header-items chip-button text timeline-selected">Education</div>
                     <div class="timeline-header-items chip-button text">Experience</div>
                 </div>
-                <div class="timeline-content focusable">
+                <div class="timeline-content">
                     <div class="timeline-line"></div>
 
 
@@ -104,13 +108,13 @@
         <div style="height: 100rem;"></div>
     </sdf-box>
 
-
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:wght@400" rel="stylesheet" />
 
     <script src="./js/custom-elements.js"></script>
     <script src="sdf-ui/src/scripts/sdf-elements.js" type="module"></script>
     <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/adaptive.js"></script>
+    <!--     <script type="module" src="js/adaptive.js"></script>
+ -->
 </body>
 
 </html>
