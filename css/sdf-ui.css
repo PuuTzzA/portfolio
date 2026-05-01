@@ -1,0 +1,61 @@
+sdf-box,
+sdf-text {
+    --z: 0rem;
+    --ambient-color: rgb(100, 110, 110);
+    --ambient-color: white;
+    --diffuse-color: var(--color-bg);
+    --diffuse-color: rgb(255, 38, 0);
+    --specular-color: white;
+    --kd: 1;
+    --ka: 0;
+    --ks: 3;
+    --p: 500;
+    --depth: 20rem;
+    --extrude: 0.2rem;
+
+    display: block;
+}
+
+sdf-text {
+    --letterSmoothness: 0.1rem;
+}
+
+#background-box {
+    --z: -10rem;
+    --depth: 100rem;
+    --diffuse-color: var(--color-bg);
+    /* --p: 10;
+    --ks: 0.2; */
+}
+
+#cursor {
+    --z: 0rem;
+    --depth: 2rem;
+}
+
+.light {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+#light-1 {
+    --diffuse-color: white;
+    --z: 10rem;
+    --light-type: directional;
+    --light-direction: 0.5 0.5 -1;
+    --light-intensity: 1;
+    --light-radius: 10rem;
+}
+
+#light-2 {
+    --diffuse-color: white;
+    top: 10rem;
+    left: 50%;
+    --z: 10rem;
+    --light-type: directional;
+    --light-direction: -0.5 0.5 -1;
+    --light-intensity: 0.5;
+    --light-radius: 100rem;
+}

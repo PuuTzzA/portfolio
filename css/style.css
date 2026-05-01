@@ -113,26 +113,6 @@ button,
     color: var(--color-text-muted);
 }
 
-sdf-box,
-sdf-text {
-    --z: 0rem;
-    --ambient-color: rgb(100, 110, 110);
-    --ambient-color: rgb(30, 30, 30);
-    --diffuse-color: var(--color-bg);
-    --specular-color: var(--color-bg);
-    --kd: 1;
-    --ka: 0.5;
-    --ks: 1;
-    --p: 10;
-    --depth: 1rem;
-
-    display: block;
-}
-
-sdf-text {
-    --diffuse-color: red;
-}
-
 /*╔══════════════════════════════════════════════════════════╗*/
 /*║                     Custom Elements                      ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
@@ -171,8 +151,8 @@ sdf-text {
     align-items: center;
     justify-content: center;
 
-    background-color: var(--color-bg-light);
-    font: var(--text);
+/*     background-color: var(--color-bg-light);
+ */    font: var(--text);
     color: var(--color-text-muted);
     border: var(--border);
     border-radius: calc(var(--header-item-height) / 2);
@@ -212,7 +192,7 @@ body {
     background-color: var(--color-bg-dark);
 }
 
-#center-column-container {
+#background-box {
     position: relative;
     top: 0;
     left: 50%;
@@ -251,7 +231,7 @@ canvas {
 @media (max-width: 1600px) {
 
     #background-canvas,
-    #center-column-container {
+    #background-box {
         width: 100%;
     }
 
@@ -278,7 +258,7 @@ canvas {
 }
 
 #focused-area.no-sdf {
-    opacity: 0.1;
+    opacity: 0.;
 }
 
 /*╔══════════════════════════════════════════════════════════╗*/
@@ -306,10 +286,12 @@ canvas {
     top: 0;
     left: 0;
 
-    background-color: red;
-    width: 5rem;
+/*     background-color: red;
+ */    width: 5rem;
     height: 5rem;
     z-index: 10;
+
+    border-radius: 1px;
 
     transform-origin: right center;
 
@@ -323,7 +305,6 @@ canvas {
     -webkit-mask-size: contain;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center;
-
 }
 
 /* #cursor::before {
@@ -379,7 +360,7 @@ canvas {
     top: 0;
     right: 0;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: var(--size-m);
 }
 
@@ -394,13 +375,13 @@ canvas {
     transition: all 0.1s;
 }
 
-@media (max-width: 1150px) {
+@media (max-width: 920px) {
     #header-link-container {
         grid-template-columns: repeat(2, 1fr);
         position: absolute;
-        right: 0;
+        top: 0;
         gap: 1rem;
-        top: calc(var(--header-item-height) + var(--size-m))
+        right: calc(var(--header-item-height) + var(--size-m))
     }
 
 }
@@ -423,11 +404,6 @@ canvas {
     opacity: 0;
     pointer-events: none;
 }
-
-.hide-header .header-link-sdf-box {
-    --z: -10rem;
-}
-
 
 /*╔══════════════════════════════════════════════════════════╗*/
 /*║                         Title                            ║*/
@@ -699,29 +675,3 @@ t-timeline-entry {
 }
 
 
-.light {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 10;
-}
-
-#light-1 {
-    --diffuse-color: white;
-    --z: 10rem;
-    --light-type: directional;
-    --light-direction: 1 1 -1;
-    --light-intensity: 1;
-    --light-radius: 100rem;
-}
-
-#light-2 {
-    --diffuse-color: white;
-    top: 30rem;
-    left: 50%;
-    --z: 10rem;
-    --light-type: directional;
-    --light-direction: 1 -1 -1;
-    --light-intensity: 2;
-    --light-radius: 100rem;
-}

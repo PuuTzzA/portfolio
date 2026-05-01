@@ -6,29 +6,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sdf-ui.css">
     <title>Putzer Thomas</title>
 </head>
 
 <body>
     <sdf-light class="light" id="light-1" data-render-layers="0"></sdf-light>
-    <sdf-light class="light" id="light-2" data-render-layers="1"></sdf-light>
+    <sdf-light class="light" id="light-2" data-render-layers="0"></sdf-light>
 
     <div id="fps">10fps</div>
 
 
     <canvas id="background-canvas" class="middle-sizing"></canvas>
 
-    <div id="cursor"></div>
+    <sdf-box id="cursor" data-layer-index="1"></sdf-box>
     <!-- <div id="vis"></div> -->
-    <div id="focused-area" class="no-sdf"></div>
+    <!-- <div id="focused-area" class="no-sdf"></div> -->
     <canvas id="focus-canvas"></canvas>
 
-    <sdf-box id="center-column-container" class="middle-sizing" data-render-layers="1">
+    <sdf-box id="background-box" class="middle-sizing" data-render-layers="0">
         <div class="header">
             <div class="appearance-settings-container">
-                <sdf-box class="button-icon material-symbols-rounded">3d</sdf-box>
-                <sdf-box class="button-icon material-symbols-rounded">routine</sdf-box>
-                <sdf-box id="toggle-header" class="button-icon material-symbols-rounded">close</sdf-box>
+                <div id="toggle-header" class="button-icon material-symbols-rounded">close</div>
+                <div class="button-icon material-symbols-rounded">3d</div>
+                <div class="button-icon material-symbols-rounded">routine</div>
             </div>
 
             <nav id="header-link-container" class="focusable show-header">
@@ -82,13 +83,15 @@
 
 
                     <t-timeline-entry title="Technical Univsersity of Munich" location="Munich, Germany"
-                        from-year="2022" from-month="Sep" to-year="now" to-month="" content="M.Sc. Informatics: Games Engineering"></t-timeline-entry>
+                        from-year="2022" from-month="Sep" to-year="now" to-month=""
+                        content="M.Sc. Informatics: Games Engineering"></t-timeline-entry>
                     <t-timeline-entry title="Technical Univsersity of Munich" location="Munich, Germany"
                         from-year="2022" from-month="Sep" to-year="2025" to-month="Oct" content="B.Sc. Informatics: Games Engineering<br>Thesis: Higher-Order Mass- and
                     Momentum-Conserving Advection for Fluid Simulations with Large Time Steps <br> GPA: 1.3
                     (Best 1.0)"></t-timeline-entry>
-                    <t-timeline-entry title="Seoul National Univsersity" location="Seoul, South Korea"
-                        from-year="2024" from-month="Sep" to-year="2025" to-month="Jan" content="Exchange Semester at SNU."></t-timeline-entry>
+                    <t-timeline-entry title="Seoul National Univsersity" location="Seoul, South Korea" from-year="2024"
+                        from-month="Sep" to-year="2025" to-month="Jan"
+                        content="Exchange Semester at SNU."></t-timeline-entry>
                     <t-timeline-entry title="Technical Secondary School Bruneck" location="Bruneck, Italy"
                         from-year="2017" from-month="Sep" to-year="2022" to-month="Jun"
                         content="Branch: Electronics and Electrical Engineering, with the focus being on Automation.<br>Maturità (High School Diploma): 100/100 Points"></t-timeline-entry>

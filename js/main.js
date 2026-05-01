@@ -8,7 +8,11 @@ const FOCUSABLE_CLASSNAME = "focusable";
 const COMPILING_CLASSNAME = "compiling";
 const NO_SDF_CLASSNAME = "no-sdf";
 
-SdfCanvas.layers = [new SdfLayer(SdfCommands.SMOOTH_UNION, 10)];
+SdfCanvas.layers = [
+    new SdfLayer(SdfCommands.SMOOTH_UNION, 5),
+    new SdfLayer(SdfCommands.SMOOTH_UNION, 50),
+];
+SdfCanvas.topFace = true;
 SdfCanvas.customElements = [];
 const loadStartTime = performance.now();
 
@@ -19,13 +23,12 @@ const finalWidth = 0;
 const renderedPixelSize = 3;
 const backgroundCanvas = new SdfCanvas("background-canvas", {
     renderLayers: [0],
-    downscaleFactorX: renderedPixelSize,
-    downscaleFactorY: renderedPixelSize,
-    topFace: false,
+    downscaleFactorX: 2,
+    downscaleFactorY: 2,
     cameraZ: CAMERA_Z,
     useAA: false,
-    twoDMode: true,
-    customShadeFunction: `
+    twoDMode: false,
+    customShadeFunction: "", /* `
         vec4 shade(Surface surface) {
             // return vec4(vec3((surface.distance + 0.0005) * 100.0f), 1.0);
             float sdfValue = (surface.distance + 0.0) * 100.0f;
@@ -39,7 +42,7 @@ const backgroundCanvas = new SdfCanvas("background-canvas", {
             COLOR_RAMP(colors, sdfValue, finalColor);
             return vec4(finalColor, 1.0f);
         }
-    `,
+    `, */
     onCompilationComplete: () => {
         const loadTime = performance.now() - loadStartTime;
         console.log("compiled in: " + (loadTime / 60000).toFixed(4) + " minutes, (" + loadTime.toFixed(4) + "ms)");
@@ -54,7 +57,6 @@ const focusCanvas = new SdfCanvas("focus-canvas", {
     renderLayers: [0, 1],
     downscaleFactorX: renderedPixelSize,
     downscaleFactorY: renderedPixelSize,
-    topFace: false,
     cameraZ: CAMERA_Z,
     useAA: false,
     twoDMode: false,
@@ -98,8 +100,8 @@ const chaser = new Chaser({
     rotation: 0,
 
     // Position spring
-    stiffness: 210,
-    damping: 22,
+    stiffness: 300,
+    damping: 25,
     mass: 1,
 
     // Rotation settings
@@ -125,6 +127,7 @@ const chaser = new Chaser({
 });
 
 
+const useFocus = false;
 let activeElement = cursor;
 
 const focusAreaChaserPos = new Chaser({
@@ -191,66 +194,49 @@ function update(time, dt) {
     /* pointerCircle.style.setProperty("--r", velocity + "px")
     pointerCircle.style.top = mouse.y + "px";
     pointerCircle.style.left = mouse.x + "px"; */
-
     cursor.style.transform = `translate(${(chaser.x - cursorWidth)}px, ${(chaser.y - cursorHeight / 2)}px) rotate(${chaser.rotation}rad)`;
+    cursor.style.transform = `translate(${(mouse.x - cursorWidth)}px, ${(mouse.y - cursorHeight / 2)}px) rotate(-45deg)`;
+
+    if (useFocus) {
+        const rect = activeElement.getBoundingClientRect();
+        const offsetX = (rect.left + rect.width * 0.5);
+        const offsetY = (rect.top + rect.height * 0.5);
+        // const offsetZ = this.twoDMode ? 0 : parseFloat(computedStyle.getPropertyValue("--z")) * oneOverX;
+
+        const width = rect.width; // + 5 * REM_PX;
+        const height = rect.height; //+ 1 * REM_PX;
+
+        focusAreaChaserWidth.update(width, dt);
+        focusAreaChaserHeight.update(height, dt);
+        focusAreaChaserPos.update({ x: offsetX, y: offsetY }, dt);
+
+        const focusX = focusAreaChaserPos.x - focusAreaChaserWidth.val / 2;
+        const focusY = focusAreaChaserPos.y - focusAreaChaserHeight.val / 2;
+        const focusW = focusAreaChaserWidth.val;
+        const focusH = focusAreaChaserHeight.val;
+
+        // 2. Move the div wrapper (Optional, if you use it for CSS borders/effects)
+        focusedArea.style.transform = `translate(${focusX}px, ${focusY}px)`;
+        focusedArea.style.width = focusW + "px";
+        focusedArea.style.height = focusH + "px";
+
+        // 3. Tell the focusCanvas to draw ONLY inside the moving rectangle
+        // REMOVE focusCanvas.alskdfja() entirely!
+        focusCanvas.draw({
+            x: focusX,//offsetX - width / 2,
+            y: focusY,//offsetY - height / 2,
+            w: focusW,//width,
+            h: focusH,//height
+        });
+    }
 
 
 
-    const rect = activeElement.getBoundingClientRect();
-    const offsetX = (rect.left + rect.width * 0.5);
-    const offsetY = (rect.top + rect.height * 0.5);
-    // const offsetZ = this.twoDMode ? 0 : parseFloat(computedStyle.getPropertyValue("--z")) * oneOverX;
 
-    const width = rect.width; // + 5 * REM_PX;
-    const height = rect.height; //+ 1 * REM_PX;
-
-    focusAreaChaserWidth.update(width, dt);
-    focusAreaChaserHeight.update(height, dt);
-    focusAreaChaserPos.update({ x: offsetX, y: offsetY }, dt);
-
-    /*     //clickableChaserDiv.style.transform = `translate(${(mouse.x - clickableChaserX.val / 2)}px, ${(mouse.y - clickableChaserY.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
-        //clickableChaserDiv.style.transform = `translate(${(offsetX - clickableChaserX.val / 2)}px, ${(offsetY - clickableChaserY.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
-        focusedArea.style.transform = `translate(${(focusAreaChaserPos.x - focusAreaChaserWidth.val / 2)}px, ${(focusAreaChaserPos.y - focusAreaChaserHeight.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
-        focusedArea.style.width = focusAreaChaserWidth.val + "px";
-        focusedArea.style.height = focusAreaChaserHeight.val + "px";
-    
-        //console.log(getComputedStyle(cursor).transform)
-        //cursor.style.transform = `rotate(${(chaser.rotation)}rad) translateX(-50%)`;
-    
-        //cursor.style.transform = `rotate(${(Math.PI / 2 + chaser.rotation)}rad)`;
-        //cursor.style.transform = `translate(${chaser.x}px, ${chaser.y}px) rotate(${chaser.rotation}rad)`;
-     */
-
-
+    SdfCanvas.update();
     backgroundCanvas.draw();
 
-    /*     fcc.style.width = focusAreaChaserWidth.val + "px";
-        fcc.style.height = focusAreaChaserHeight.val + "px";
-        //fcc.style.top = focusAreaChaserPos.x - focusAreaChaserWidth.val / 2 + "px";
-        //fcc.style.left = focusAreaChaserPos.y - focusAreaChaserHeight.val / 2 + "px";
-        fcc.style.transform = `translate(${(focusAreaChaserPos.x - focusAreaChaserWidth.val / 2)}px, ${(focusAreaChaserPos.y - focusAreaChaserHeight.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
-     */
 
-
-
-    const focusX = focusAreaChaserPos.x - focusAreaChaserWidth.val / 2;
-    const focusY = focusAreaChaserPos.y - focusAreaChaserHeight.val / 2;
-    const focusW = focusAreaChaserWidth.val;
-    const focusH = focusAreaChaserHeight.val;
-
-    // 2. Move the div wrapper (Optional, if you use it for CSS borders/effects)
-    focusedArea.style.transform = `translate(${focusX}px, ${focusY}px)`;
-    focusedArea.style.width = focusW + "px";
-    focusedArea.style.height = focusH + "px";
-
-    // 3. Tell the focusCanvas to draw ONLY inside the moving rectangle
-    // REMOVE focusCanvas.alskdfja() entirely!
-    focusCanvas.draw({
-        x: focusX,//offsetX - width / 2,
-        y: focusY,//offsetY - height / 2,
-        w: focusW,//width,
-        h: focusH,//height
-    });
 
     //focusCanvas.canvas.style.transform = `translate(${(focusAreaChaserPos.x - focusAreaChaserWidth.val / 2)}px, ${(focusAreaChaserPos.y - focusAreaChaserHeight.val / 2)}px)`; // rotate(${chaser.rotation}rad)`;
     //focusCanvas.canvas.style.width = focusAreaChaserWidth.val + "px";
