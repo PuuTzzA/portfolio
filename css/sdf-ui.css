@@ -1,7 +1,10 @@
 sdf-sphere,
 sdf-box,
 sdf-text {
-    --z: 0rem;
+    --z: 10rem;
+    --depth: 20rem;
+    --extrude: 0.2rem;
+
     --ambient-color: rgb(100, 110, 110);
     --ambient-color: white;
     --diffuse-color: var(--color-bg);
@@ -11,8 +14,6 @@ sdf-text {
     --ka: 0;
     --ks: 1;
     --p: 500;
-    --depth: 20rem;
-    --extrude: 0.2rem;
 
     display: block;
 }
@@ -22,7 +23,7 @@ sdf-text {
 }
 
 #background-box {
-    --z: -12rem;
+    --z: 0rem;
     --depth: 100rem;
     --diffuse-color: var(--color-bg);
     /* --p: 10;
@@ -30,18 +31,29 @@ sdf-text {
 }
 
 #cursor {
-    --z: 0rem;
+    --z: 10rem;
     --r: 5rem;
     --depth: 1rem;
 }
 
-.header-link-sdf-box {
+.header-link-sdf-box,
+.timeline-header-items {
+    --diffuse-color: var(--color-bg-light);
+}
+
+.header-link-sdf-box:hover,
+.timeline-header-items:hover {
+    --diffuse-color: var(--color-bg-active);
+}
+
+.header-link-sdf-negative-box {
     --diffuse-color: var(--color-bg-light);
 }
 
 .title-text {
     --depth: 1rem;
 }
+
 
 .light {
     position: absolute;

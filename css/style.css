@@ -69,7 +69,8 @@
 
 
     --text-padding: var(--size-s) var(--size-l);
-    --transition-params: 0.1s cubic-bezier(0.3, 0.8, 0.2, 1.3);
+    --transition-params: 0.2s cubic-bezier(0.3, 0.8, 0.2, 1.3);
+    --transition-params-ease: 0.2s ease-in-out;
 
     --compiling-invert: 0%;
 }
@@ -113,31 +114,6 @@ button,
     color: var(--color-text-muted);
 }
 
-/*╔══════════════════════════════════════════════════════════╗*/
-/*║                     Custom Elements                      ║*/
-/*╚══════════════════════════════════════════════════════════╝*/
-
-/* span with icons */
-.span-with-icon {
-    display: flex;
-    align-items: center;
-    gap: var(--size-xs);
-    height: var(--size-m);
-}
-
-.span-with-icon-between {
-    justify-content: space-between;
-}
-
-.span-with-icon-title {
-    padding-right: var(--size-m);
-}
-
-.span-with-icon-content {
-    display: flex;
-    align-items: center;
-    gap: var(--size-xs);
-}
 
 /*  */
 
@@ -163,29 +139,6 @@ button,
     /* Prevents horizontal shifting */
 }
 
-.chip-button {
-    height: var(--header-item-height);
-    border-radius: calc(var(--header-item-height) / 2);
-
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-
-    border: var(--border);
-    padding: var(--text-padding);
-    padding: 0.75rem 2.5rem;
-
-    transition: all var(--transition-params);
-    background-color: var(--color-bg-light);
-}
-
-.chip-button:hover {
-    cursor: pointer;
-}
-
-.chip-button:active {
-    background-color: var(--color-bg-active);
-}
 
 
 body {
@@ -392,11 +345,6 @@ canvas {
     background-color: var(--color-bg-light) !important;
 }
 
-.header-link {
-    font: var(--text);
-    color: var(--color-text);
-}
-
 .show-header {}
 
 .hide-header {
@@ -546,25 +494,26 @@ canvas {
 .timeline-header {
     display: flex;
     justify-content: center;
-    gap: var(--size-m);
+    gap: var(--size-xl);
+    margin-bottom: var(--size-xl);
 }
 
 .timeline-header-items {
     flex-grow: 1;
     text-align: center;
-    background-color: var(--color-bg);
+    /* background-color: var(--color-bg); */
 }
 
 .timeline-header-items:hover {
-    background-color: var(--color-bg-light);
+    /* background-color: var(--color-bg-light); */
 }
 
 .timeline-header-items:active {
-    background-color: var(--color-bg-active);
+    /* background-color: var(--color-bg-active); */
 }
 
 .timeline-selected {
-    background-color: var(--color-bg-light);
+    /* background-color: var(--color-bg-light); */
 }
 
 
@@ -594,45 +543,6 @@ canvas {
     background: var(--color-text);
     width: var(--size-xxs);
     border-radius: calc(var(--size-xxs) / 2);
-}
-
-t-timeline-entry {
-    display: contents;
-}
-
-.timeline-date {
-    grid-column: date;
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-    gap: var(--size-s);
-}
-
-.timeline-date * {
-    height: var(--size-m);
-}
-
-.timeline-dot {
-    grid-column: line;
-    justify-self: center;
-    align-self: start;
-
-    width: 0.75rem;
-    height: 0.75rem;
-    top: 0.125rem;
-    background-color: var(--color-text);
-    /* Contrast color to stand out from line */
-    border-radius: 50%;
-
-    position: relative;
-    z-index: 2;
-}
-
-.timeline-card {
-    grid-column: card;
-    display: flex;
-    flex-direction: column;
-    gap: var(--size-s);
 }
 
 /* TEST */

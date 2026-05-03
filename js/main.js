@@ -9,10 +9,11 @@ const COMPILING_CLASSNAME = "compiling";
 const NO_SDF_CLASSNAME = "no-sdf";
 
 SdfCanvas.layers = [
-    new SdfLayer(SdfCommands.SMOOTH_UNION, 5),  // buttons that are close
-    new SdfLayer(SdfCommands.SMOOTH_UNION, 20), // other stuff like the text
-    new SdfLayer(SdfCommands.SMOOTH_UNION, 5),  // the background box
-    new SdfLayer(SdfCommands.SMOOTH_UNION, 50), // the cursor
+    new SdfLayer(SdfCommands.SMOOTH_UNION, 5),       // buttons that are close
+    new SdfLayer(SdfCommands.SMOOTH_UNION, 20),      // other stuff like the text
+    new SdfLayer(SdfCommands.SMOOTH_UNION, 5),       // the background box
+    new SdfLayer(SdfCommands.SMOOTH_SUBTRACTION, 5), // push-buttons-negative-side
+    new SdfLayer(SdfCommands.SMOOTH_UNION, 50),      // the cursor
 ];
 SdfCanvas.topFace = true;
 SdfCanvas.customElements = [];
@@ -187,7 +188,7 @@ function update(time, dt) {
     pointerCircle.style.top = mouse.y + "px";
     pointerCircle.style.left = mouse.x + "px"; */
     //cursor.style.transform = `translate(${(chaser.x - cursorWidth)}px, ${(chaser.y - cursorHeight / 2)}px) rotate(${chaser.rotation}rad)`;
-    cursor.style.transform = `translate(${(mouse.x - cursorWidth)}px, ${(mouse.y - cursorHeight / 2)}px) rotate(-45deg)`;
+    cursor.style.transform = `translate(${(mouse.x - cursorWidth / 2)}px, ${mouse.y - cursorHeight / 2}px)`;
 
     SdfCanvas.update();
     if (useFocus) {

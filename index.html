@@ -19,7 +19,7 @@
 
     <canvas id="background-canvas" class="middle-sizing"></canvas>
 
-    <sdf-sphere id="cursor" data-layer-index="3" data-render-layers="0"></sdf-sphere>
+    <sdf-sphere id="cursor" data-layer-index="4" data-render-layers="0"></sdf-sphere>
     <!-- <div id="vis"></div> -->
     <div id="focused-area" class="no-sdf"></div>
     <canvas id="focus-canvas"></canvas>
@@ -33,18 +33,14 @@
             </div>
 
             <nav id="header-link-container" class="focusable show-header">
-                <sdf-box class="no-sdf header-link-sdf-box chip-button">
-                    <a class="header-link" href="#about">About</a>
-                </sdf-box>
-                <sdf-box class="no-sdf header-link-sdf-box chip-button">
-                    <a class="header-link" href="#timeline">Timeline</a>
-                </sdf-box>
-                <sdf-box class="no-sdf header-link-sdf-box chip-button">
-                    <a class="header-link" href="#projects">Projects</a>
-                </sdf-box>
-                <sdf-box class="no-sdf header-link-sdf-box chip-button">
-                    <a class="header-link" href="#contact">Contact</a>
-                </sdf-box>
+                <t-sdf-push-button content="About" link-href="#about" sdf-element-class="header-link-sdf-box"
+                    sdf-negative-class="header-link-sdf-box"></t-sdf-push-button>
+                <t-sdf-push-button content="Timeline" link-href="#timeline" sdf-element-class="header-link-sdf-box"
+                    sdf-negative-class="header-link-sdf-box"></t-sdf-push-button>
+                <t-sdf-push-button content="Projects" link-href="#projects" sdf-element-class="header-link-sdf-box"
+                    sdf-negative-class="header-link-sdf-box"></t-sdf-push-button>
+                <t-sdf-push-button content="Contact" link-href="#contact" sdf-element-class="header-link-sdf-box"
+                    sdf-negative-class="header-link-sdf-box"></t-sdf-push-button>
             </nav>
             <!--             <sdf-box id="toggle-header" class="focusable button-icon material-symbols-rounded">close</sdf-box>
  -->
@@ -79,8 +75,13 @@
 
             <div id="timeline" class="focusable">
                 <div class="timeline-header">
-                    <div class="timeline-header-items chip-button text timeline-selected">Education</div>
-                    <div class="timeline-header-items chip-button text">Experience</div>
+                    <t-sdf-push-button content="Education" link-href="" sdf-element-class="timeline-header-items"
+                        sdf-negative-class="timeline-header-items"></t-sdf-push-button>
+                    <t-sdf-push-button content="Experience" link-href="" sdf-element-class="timeline-header-items"
+                        sdf-negative-class="timeline-header-items"></t-sdf-push-button>
+
+                    <!-- <div class="timeline-header-items chip-button text timeline-selected">Education</div>
+                    <div class="timeline-header-items chip-button text">Experience</div> -->
                 </div>
                 <div class="timeline-content">
                     <div class="timeline-line"></div>
@@ -110,7 +111,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:wght@400" rel="stylesheet" />
 
-    <script src="./js/custom-elements.js"></script>
+    <script src="js/custom-elements.js" type="module"></script>
     <script src="sdf-ui/src/scripts/sdf-elements.js" type="module"></script>
     <script type="module" src="js/main.js"></script>
     <!--     <script type="module" src="js/adaptive.js"></script>

@@ -1,0 +1,119 @@
+/*╔══════════════════════════════════════════════════════════╗*/
+/*║                     Sdf push button                      ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
+t-sdf-push-button {
+    display: contents;
+}
+
+.sdf-push-button {
+    background-color: rgba(0, 0, 0, 0);
+    position: relative;
+    height: var(--header-item-height);
+    border-radius: calc(var(--header-item-height) / 2);
+
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+
+    padding: var(--text-padding);
+    padding: 0.75rem 2.5rem;
+
+    transition: all var(--transition-params);
+
+    --z: 10rem;
+    transition: --z var(--transition-params);
+}
+
+.sdf-push-button:hover {
+    cursor: pointer;
+}
+
+.sdf-push-button:active {
+    --z: -1rem;
+}
+
+.sdf-push-button-negative {
+    position: absolute;
+    border-radius: inherit;
+    width: 100%;
+    height: 100%;
+
+    --z: 16rem;
+    --depth: 4rem;
+
+    transition: --z var(--transition-params);
+    transition: --diffuse-color var(--transition-params-ease);
+}
+
+.sdf-push-button-negative:active {
+    --z: 1rem;
+    --diffuse-color: var(--color-bg);
+}
+
+
+/*╔══════════════════════════════════════════════════════════╗*/
+/*║                     Span with icon                       ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
+.span-with-icon {
+    display: flex;
+    align-items: center;
+    gap: var(--size-xs);
+    height: var(--size-m);
+}
+
+.span-with-icon-between {
+    justify-content: space-between;
+}
+
+.span-with-icon-title {
+    padding-right: var(--size-m);
+}
+
+.span-with-icon-content {
+    display: flex;
+    align-items: center;
+    gap: var(--size-xs);
+}
+
+/*╔══════════════════════════════════════════════════════════╗*/
+/*║                     Timeline entry                       ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
+t-timeline-entry {
+    display: contents;
+}
+
+.timeline-date {
+    grid-column: date;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-s);
+}
+
+.timeline-date * {
+    height: var(--size-m);
+}
+
+.timeline-dot {
+    grid-column: line;
+    justify-self: center;
+    align-self: start;
+
+    width: 0.75rem;
+    height: 0.75rem;
+    top: 0.125rem;
+    background-color: var(--color-text);
+    /* Contrast color to stand out from line */
+    border-radius: 50%;
+
+    position: relative;
+    z-index: 2;
+}
+
+.timeline-card {
+    grid-column: card;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-s);
+}
