@@ -1,19 +1,21 @@
-import { SdfCanvas, SdfLayer, SdfCommands } from "../sdf-ui/src/scripts/sdf-ui.js";
+import { SdfCanvas, SdfLayer, SdfCommands, Twist } from "../sdf-ui/src/scripts/sdf-ui.js";
 import { SpringlikeProperty, Chaser } from "./chaser.js";
 import { TimeAverage } from "./time-average.js";
 
 const CAMERA_Z = 10;
 const REM_PX = parseFloat(getComputedStyle(document.documentElement).fontSize);
 const FOCUSABLE_CLASSNAME = "focusable";
+const PUSH_BUTTON_CLASSNAME = "sdf-push-button";
 const COMPILING_CLASSNAME = "compiling";
 const NO_SDF_CLASSNAME = "no-sdf";
 
+const bgButtonSmoothness = 8;
 SdfCanvas.layers = [
-    new SdfLayer(SdfCommands.SMOOTH_UNION, 5),       // buttons that are close
-    new SdfLayer(SdfCommands.SMOOTH_UNION, 20),      // other stuff like the text
-    new SdfLayer(SdfCommands.SMOOTH_UNION, 5),       // the background box
-    new SdfLayer(SdfCommands.SMOOTH_SUBTRACTION, 5), // push-buttons-negative-side
-    new SdfLayer(SdfCommands.SMOOTH_UNION, 50),      // the cursor
+    new SdfLayer(SdfCommands.SMOOTH_UNION, 5),                        // buttons that are close
+    new SdfLayer(SdfCommands.SMOOTH_UNION, 20),                       // other stuff like the text
+    new SdfLayer(SdfCommands.SMOOTH_UNION, bgButtonSmoothness),       // the background box
+    new SdfLayer(SdfCommands.SMOOTH_SUBTRACTION, bgButtonSmoothness), // push-buttons-negative-side
+    new SdfLayer(SdfCommands.SMOOTH_UNION, 50),                       // the cursor
 ];
 SdfCanvas.topFace = true;
 SdfCanvas.customElements = [];
@@ -21,7 +23,7 @@ const loadStartTime = performance.now();
 
 const finalWidth = 0;
 const renderedPixelSize = 3;
-const sdfCanvas = new SdfCanvas("background-canvas", {
+const sdfCanvas = new SdfCanvas("sdf-canvas", {
     onCompilationComplete: () => {
         const loadTime = performance.now() - loadStartTime;
         console.log("compiled in: " + (loadTime / 60000).toFixed(4) + " minutes, (" + loadTime.toFixed(4) + "ms)");
@@ -75,6 +77,47 @@ const cursor = document.getElementById("cursor");
 const cursorWidth = cursor.offsetWidth;
 const cursorHeight = cursor.offsetHeight;
 const fpsDiv = document.getElementById("fps");
+const titleText = document.getElementById("title-text");
+const titleTextTwistTarget = document.getElementById("title-text-twist-target");
+const titleTwistModifier = new Twist(titleTextTwistTarget, false);
+
+let titleTwistAnimating = false;
+let titleClickQueued = false; // Stores if a click happened while animating
+
+titleText.addEventListener("click", () => {
+    if (!titleTextTwistTarget) return;
+
+    if (titleTwistAnimating) {
+        titleClickQueued = true;
+        return;
+    }
+
+    titleTwistAnimating = true;
+    titleTwistModifier.active = true;
+    titleTextTwistTarget.classList.add("title-text-twist-target-right");
+});
+
+titleTextTwistTarget.addEventListener("animationend", () => {
+    titleTextTwistTarget.classList.remove("title-text-twist-target-right");
+
+    if (titleClickQueued) {
+        titleClickQueued = false;
+
+        // Force a DOM reflow! 
+        // This makes the browser process the class removal above 
+        // before we add it back below, ensuring the animation restarts.
+        void titleTextTwistTarget.offsetWidth;
+
+        titleTextTwistTarget.classList.add("title-text-twist-target-right");
+    } else {
+        titleTwistModifier.active = false;
+        titleTwistAnimating = false;
+    }
+});
+
+titleText.addModifier(titleTwistModifier);
+
+
 const pointerCircle = document.getElementById("vis");
 
 const focusedArea = document.getElementById("focused-area");
@@ -257,6 +300,16 @@ function focusableOnMouseOut(e) {
     // activeElement = pointerCircle;
 }
 
+function pushButtonMouseIn(e) {
+    cursor.classList.add("cursor-away");
+    console.log("MOIN")
+}
+
+function pushButtonMouseOut(e) {
+    cursor.classList.remove("cursor-away");
+    // activeElement = pointerCircle;
+}
+
 // ╔══════════════════════════════════════════════════════════╗
 // ║                     Attach Callbacks                     ║
 // ╚══════════════════════════════════════════════════════════╝
@@ -270,6 +323,12 @@ for (let i = 0; i < focusables.length; i++) {
     focusable.addEventListener("mouseout", focusableOnMouseOut);
 }
 
+const pushButtons = document.getElementsByClassName(PUSH_BUTTON_CLASSNAME);
+for (let i = 0; i < pushButtons.length; i++) {
+    const button = pushButtons[i];
+    button.addEventListener("mouseover", pushButtonMouseIn);
+    button.addEventListener("mouseout", pushButtonMouseOut);
+}
 
 let lastTime = performance.now();
 function gameLoop(now) {

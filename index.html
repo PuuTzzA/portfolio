@@ -17,7 +17,7 @@
     <div id="fps">10fps</div>
 
 
-    <canvas id="background-canvas" class="middle-sizing"></canvas>
+    <canvas id="sdf-canvas" class="middle-sizing"></canvas>
 
     <sdf-sphere id="cursor" data-layer-index="4" data-render-layers="0"></sdf-sphere>
     <!-- <div id="vis"></div> -->
@@ -49,9 +49,9 @@
         <div id="about" class="content-container">
             <div class="about-container">
                 <div class="focusable">
-                    <div>
-                        <sdf-text class="no-sdf title-text" data-layer-index="1" data-render-layers="0">thomas
-                            putzer</sdf-text>
+                    <div id="title-text-container">
+                        <sdf-text id="title-text" class="no-sdf" data-layer-index="1" data-render-layers="0">thomas putzer</sdf-text>
+                        <div id="title-text-twist-target" data-active="true"></div>
                     </div>
                     <div class="about-section">
                         <div class="about-section-info">

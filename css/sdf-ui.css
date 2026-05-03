@@ -8,7 +8,7 @@ sdf-text {
     --ambient-color: rgb(100, 110, 110);
     --ambient-color: white;
     --diffuse-color: var(--color-bg);
-    --diffuse-color: rgb(255, 42, 0);
+    --diffuse-color: var(--color-accent);
     --specular-color: white;
     --kd: 1;
     --ka: 0;
@@ -32,8 +32,15 @@ sdf-text {
 
 #cursor {
     --z: 10rem;
-    --r: 5rem;
+    --r: 5em;
     --depth: 1rem;
+    transition: --r var(--transition-params-long), --z var(--transition-params-long), --extrude var(--transition-params-long);
+}
+
+.cursor-away {
+    --z: 25rem !important;
+    --r: 0rem !important;
+    --extrude: 0rem !important;
 }
 
 .header-link-sdf-box,
@@ -43,17 +50,55 @@ sdf-text {
 
 .header-link-sdf-box:hover,
 .timeline-header-items:hover {
-    --diffuse-color: var(--color-bg-active);
+    --diffuse-color: var(--color-accent);
 }
 
 .header-link-sdf-negative-box {
     --diffuse-color: var(--color-bg-light);
 }
 
-.title-text {
-    --depth: 1rem;
+#title-text-container {
+    position: relative;
 }
 
+#title-text {
+    --depth: 1.5rem;
+}
+
+#title-text-twist-target {
+    position: absolute;
+    top: calc(50% - 0.5rem);
+    left: calc(50% - 0.5rem);
+    left: -21rem;
+    --z: 9.25rem;
+
+    --twist-axis: 1 0 0;
+    --twist-rate: 0.05;
+    --twist-start: 19rem;
+    --twist-end: 21rem;
+    --twist-start-offset: 180;
+
+    width: 1rem;
+    height: 1rem;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Define the movement */
+@keyframes slideRight {
+    0% {
+        left: -21rem;
+    }
+
+    100% {
+        left: calc(100% + 21rem);
+    }
+}
+
+.title-text-twist-target-right {
+    /* Apply the animation over 4 seconds, moving forwards */
+    /* You can change "ease" to "linear" if you want a constant speed */
+    animation: slideRight 2s ease forwards;
+}
 
 .light {
     position: absolute;

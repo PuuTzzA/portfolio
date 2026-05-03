@@ -19,10 +19,8 @@ t-sdf-push-button {
     padding: var(--text-padding);
     padding: 0.75rem 2.5rem;
 
-    transition: all var(--transition-params);
-
     --z: 10rem;
-    transition: --z var(--transition-params);
+    transition: --z var(--transition-params), --diffuse-color var(--transition-params-long);
 }
 
 .sdf-push-button:hover {
@@ -42,13 +40,12 @@ t-sdf-push-button {
     --z: 16rem;
     --depth: 4rem;
 
-    transition: --z var(--transition-params);
-    transition: --diffuse-color var(--transition-params-ease);
+    transition: --z var(--transition-params), --diffuse-color var(--transition-params-ease);
 }
 
 .sdf-push-button-negative:active {
     --z: 1rem;
-    --diffuse-color: var(--color-bg);
+    --diffuse-color: var(--color-accent);
 }
 
 
