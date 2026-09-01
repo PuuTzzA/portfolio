@@ -22,7 +22,8 @@
 :root {
     /* lighness [0, 1], chroma (saturation) [0, 0.4], hue [0°, 360°]*/
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/oklch */
-    --color-bg-dark: oklch(0.1 0 0);
+    --color-bg-extra-dark: oklch(0.05 0 0);
+    --color-bg-dark: oklch(0.1 0.0021 286.15);
     --color-bg: oklch(0.1548 0.0021 286.15);
     --color-bg-light: oklch(0.2578 0.0074 285.87);
     --color-bg-active: oklch(0.3578 0.0074 285.87);
@@ -38,7 +39,7 @@
     --border: 1px solid var(--color-border);
     --border-muted: oklch(0.3 0 0);
 
-    --central-column-width: 70%;
+    --central-column-width: 50%;
     --central-column-max-width: 80rem;
 
     --header-item-height: 3rem;
@@ -78,7 +79,7 @@
     --compiling-invert: 0%;
 }
 
-body{
+body {
     overflow-x: hidden;
 }
 
@@ -90,7 +91,7 @@ body.light {
 
     --color-bg-light: oklch(0.96 0 0);
     --color-bg: oklch(0.76 0 0);
-    --color-bg-dark: oklch(0.5 0 0);
+    --color-bg-extra-dark: oklch(0.5 0 0);
 
 }
 
@@ -134,8 +135,9 @@ button,
     align-items: center;
     justify-content: center;
 
-/*     background-color: var(--color-bg-light);
- */    font: var(--text);
+    /*     background-color: var(--color-bg-light);
+ */
+    font: var(--text);
     color: var(--color-text-muted);
     border: var(--border);
     border-radius: calc(var(--header-item-height) / 2);
@@ -149,11 +151,23 @@ button,
 
 
 body {
-    background-color: var(--color-bg-dark);
+    background-color: var(--color-bg-extra-dark);
 }
 
-#background-box {
+#page-content-container {
     position: relative;
+}
+
+#content-stencil-canvas {
+    position: fixed;
+    height: 100vh;
+    
+    border-left: var(--border);
+    border-right: var(--border);
+}
+
+#page-content-container,
+#content-stencil-canvas {
     top: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -173,37 +187,23 @@ canvas {
 #sdf-canvas {
     position: fixed;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: var(--central-column-width);
-    max-width: var(--central-column-max-width);
+    left: 0;
+    width: 100%;
+    height: 100vh;
 
     z-index: -1;
     background-color: red;
-    height: 100vh;
 
     background-color: var(--color-bg);
-    border-left: var(--border);
-    border-right: var(--border);
 }
 
 @media (max-width: 1600px) {
 
     #sdf-canvas,
-    #background-box {
+    #page-content-container,
+    #content-stencil-canvas {
         width: 100%;
     }
-
-}
-
-#focus-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 0;
-    pointer-events: none;
 }
 
 #focused-area {
@@ -245,8 +245,9 @@ canvas {
     top: 0;
     left: 0;
 
-/*     background-color: red;
- */    width: 5rem;
+    /*     background-color: red;
+ */
+    width: 5rem;
     height: 5rem;
     z-index: 10;
 
@@ -254,7 +255,7 @@ canvas {
 
     transform-origin: right center;
 
-    background-color: var(--color-text);
+    /*     background-color: var(--color-text);
     mask-image: url("../assets/icons/cursor.svg");
     mask-size: contain;
     mask-repeat: no-repeat;
@@ -262,7 +263,7 @@ canvas {
     -webkit-mask-image: url("../assets/icons/cursor.svg");
     -webkit-mask-size: contain;
     -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
+    -webkit-mask-position: center; */
 }
 
 /* #cursor::before {
@@ -361,7 +362,7 @@ canvas {
 /*╔══════════════════════════════════════════════════════════╗*/
 /*║                         Title                            ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
-.content-container {
+.about-content-container {
     position: absolute;
     left: 0;
     top: 0;
@@ -589,5 +590,3 @@ canvas {
     top: 40rem;
     left: 30rem;
 }
-
-

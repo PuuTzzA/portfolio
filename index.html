@@ -11,20 +11,23 @@
 </head>
 
 <body>
-    <sdf-light class="light" id="light-1" data-render-layers="0"></sdf-light>
+    <sdf-light class="light" id="light-1" data-render-layers="1"></sdf-light>
     <sdf-light class="light" id="light-2" data-render-layers="1"></sdf-light>
+    <!-- this lights is only for the background to pass color info -->
+    <sdf-light class="light" id="light-3" data-render-layers="2"></sdf-light>
+    <sdf-light class="light" id="light-4" data-render-layers="2"></sdf-light>
+    <!-- this lights is only for the background to pass color info -->
 
     <div id="fps">10fps</div>
 
 
     <canvas id="sdf-canvas" class="middle-sizing"></canvas>
+    <div id="content-stencil-canvas"></div>
 
     <sdf-sphere id="cursor" data-layer-index="4" data-render-layers="0"></sdf-sphere>
     <!-- <div id="vis"></div> -->
-    <div id="focused-area" class="no-sdf"></div>
-    <canvas id="focus-canvas"></canvas>
 
-    <sdf-box id="background-box" class="middle-sizing" data-layer-index="2" data-render-layers="1">
+    <sdf-box id="page-content-container" class="" data-layer-index="2" data-render-layers="1">
         <div class="header">
             <div class="appearance-settings-container">
                 <div id="toggle-header" class="button-icon material-symbols-rounded">close</div>
@@ -34,23 +37,24 @@
 
             <nav id="header-link-container" class="focusable show-header">
                 <t-sdf-push-button content="About" link-href="#about" sdf-element-class="header-link-sdf-box"
-                    sdf-negative-class="header-link-sdf-box"></t-sdf-push-button>
+                    sdf-negative-class="header-link-sdf-box" data-render-layers="1"></t-sdf-push-button>
                 <t-sdf-push-button content="Timeline" link-href="#timeline" sdf-element-class="header-link-sdf-box"
-                    sdf-negative-class="header-link-sdf-box"></t-sdf-push-button>
+                    sdf-negative-class="header-link-sdf-box" data-render-layers="1"></t-sdf-push-button>
                 <t-sdf-push-button content="Projects" link-href="#projects" sdf-element-class="header-link-sdf-box"
-                    sdf-negative-class="header-link-sdf-box"></t-sdf-push-button>
+                    sdf-negative-class="header-link-sdf-box" data-render-layers="1"></t-sdf-push-button>
                 <t-sdf-push-button content="Contact" link-href="#contact" sdf-element-class="header-link-sdf-box"
-                    sdf-negative-class="header-link-sdf-box"></t-sdf-push-button>
+                    sdf-negative-class="header-link-sdf-box" data-render-layers="1"></t-sdf-push-button>
             </nav>
             <!--             <sdf-box id="toggle-header" class="focusable button-icon material-symbols-rounded">close</sdf-box>
  -->
         </div>
 
-        <div id="about" class="content-container">
+        <div id="about" class="about-content-container">
             <div class="about-container">
                 <div class="focusable">
                     <div id="title-text-container">
-                        <sdf-text id="title-text" class="no-sdf" data-layer-index="1" data-render-layers="0">thomas putzer</sdf-text>
+                        <sdf-text id="title-text" class="no-sdf" data-layer-index="1" data-render-layers="1">thomas
+                            putzer</sdf-text>
                         <div id="title-text-twist-target" data-active="true"></div>
                     </div>
                     <div class="about-section">
@@ -76,9 +80,9 @@
             <div id="timeline" class="focusable">
                 <div class="timeline-header">
                     <t-sdf-push-button content="Education" link-href="" sdf-element-class="timeline-header-items"
-                        sdf-negative-class="timeline-header-items"></t-sdf-push-button>
+                        sdf-negative-class="timeline-header-items" data-render-layers="1"></t-sdf-push-button>
                     <t-sdf-push-button content="Experience" link-href="" sdf-element-class="timeline-header-items"
-                        sdf-negative-class="timeline-header-items"></t-sdf-push-button>
+                        sdf-negative-class="timeline-header-items" data-render-layers="1"></t-sdf-push-button>
 
                     <!-- <div class="timeline-header-items chip-button text timeline-selected">Education</div>
                     <div class="timeline-header-items chip-button text">Experience</div> -->

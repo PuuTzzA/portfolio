@@ -4,7 +4,7 @@ import { TimeAverage } from "./time-average.js";
 
 const CAMERA_Z = 10;
 const REM_PX = parseFloat(getComputedStyle(document.documentElement).fontSize);
-const FOCUSABLE_CLASSNAME = "focusable";
+const FOCUSABLE_CLASSNAME = ""; //"focusable";
 const PUSH_BUTTON_CLASSNAME = "sdf-push-button";
 const COMPILING_CLASSNAME = "compiling";
 const NO_SDF_CLASSNAME = "no-sdf";
@@ -22,7 +22,8 @@ SdfCanvas.customElements = [];
 const loadStartTime = performance.now();
 
 const finalWidth = 0;
-const renderedPixelSize = 3;
+const renderedPixelSize = 4;
+const renderedPixelSizeBackground = renderedPixelSize;
 const sdfCanvas = new SdfCanvas("sdf-canvas", {
     onCompilationComplete: () => {
         const loadTime = performance.now() - loadStartTime;
@@ -42,27 +43,30 @@ const sdfCanvas = new SdfCanvas("sdf-canvas", {
         customShadeFunction: ``,
     },
     backgroundCanvas: {
-        renderLayers: [0],
-        downscaleFactorX: 2,// renderedPixelSize,
-        downscaleFactorY: 2,// REM_PX * 1.5,
+        renderLayers: [0, 2],
+        downscaleFactorX: renderedPixelSizeBackground,
+        downscaleFactorY: renderedPixelSizeBackground,
         cameraZ: CAMERA_Z,
         useAA: false,
         twoDMode: true,
-        customShadeFunction: "", /* `
+        customShadeFunction: `
             vec4 shade(Surface surface) {
                 // return vec4(vec3((surface.distance + 0.0005) * 100.0f), 1.0);
-                float sdfValue = (surface.distance + 0.0) * 100.0f;
+                float sdfValue = clamp((surface.distance + lightData[3 + 2].y) * 100.0f, 0.0f, 1.0f);
 
+                vec3 bgColor = lightData[1].xyz;
+                vec3 accentColor = lightData[3 + 1].xyz;
                 ColorStop[] colors = ColorStop[](
                 //ColorStop(surface.colorDiffuse, 0.000000), ColorStop(vec3(0.0f), 1.0f));
-                ColorStop(vec3(0.0f), 0.000000), ColorStop(vec3(1.0f), 0.5), ColorStop(vec3(0.0f), 1.0f));
+                ColorStop(bgColor, 0.000000), ColorStop(accentColor, 0.5), ColorStop(bgColor, 1.0f));
+                //ColorStop(vec3(0.0f), 0.000000), ColorStop(vec3(1.0f), 0.5), ColorStop(vec3(0.0f), 1.0f));
                 //ColorStop(vec3(0.000000f, 0.000000f, 0.015996f), 0.000000f), ColorStop(vec3(0.008023f, 0.002428f, 0.162029f), 0.300000f), ColorStop(vec3(0.590619f, 0.964686f, 0.428690f), 0.400000f), ColorStop(vec3(0.991102f, 0.031896f, 0.814847f), 0.600000f), ColorStop(vec3(1.000000f, 0.000000f, 0.001821f), 0.800000f), ColorStop(vec3(0.008023f, 0.002428f, 0.162029f), 0.900000f), ColorStop(vec3(0.000000f, 0.000000f, 0.015996f), 1.000000f));
 
                 vec3 finalColor;
                 COLOR_RAMP(colors, sdfValue, finalColor);
                 return vec4(finalColor, 1.0f);
         }
-        `, */
+        `,
     },
     backgroundSmoothScaling: false,
 });
@@ -73,6 +77,7 @@ SdfCanvas.performForEachElement((e) => {
 
 sdfCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
 
+const contentStencil = document.getElementById("content-stencil-canvas");
 const cursor = document.getElementById("cursor");
 const cursorWidth = cursor.offsetWidth;
 const cursorHeight = cursor.offsetHeight;
@@ -231,32 +236,40 @@ function update(time, dt) {
     pointerCircle.style.top = mouse.y + "px";
     pointerCircle.style.left = mouse.x + "px"; */
     //cursor.style.transform = `translate(${(chaser.x - cursorWidth)}px, ${(chaser.y - cursorHeight / 2)}px) rotate(${chaser.rotation}rad)`;
+    
     cursor.style.transform = `translate(${(mouse.x - cursorWidth / 2)}px, ${mouse.y - cursorHeight / 2}px)`;
 
     SdfCanvas.update();
     if (useFocus) {
-        const rect = activeElement.getBoundingClientRect();
-        const offsetX = (rect.left + rect.width * 0.5);
-        const offsetY = (rect.top + rect.height * 0.5);
-        // const offsetZ = this.twoDMode ? 0 : parseFloat(computedStyle.getPropertyValue("--z")) * oneOverX;
+        // const rect = activeElement.getBoundingClientRect();
+        // const offsetX = (rect.left + rect.width * 0.5);
+        // const offsetY = (rect.top + rect.height * 0.5);
+        // // const offsetZ = this.twoDMode ? 0 : parseFloat(computedStyle.getPropertyValue("--z")) * oneOverX;
+        // 
+        // const width = rect.width + 5 * REM_PX;
+        // const height = rect.height + 5 * REM_PX;
+        // 
+        // focusAreaChaserWidth.update(width, dt);
+        // focusAreaChaserHeight.update(height, dt);
+        // focusAreaChaserPos.update({ x: offsetX, y: offsetY }, dt);
 
-        const width = rect.width + 5 * REM_PX;
-        const height = rect.height + 5 * REM_PX;
+        // const focusX = focusAreaChaserPos.x - focusAreaChaserWidth.val / 2;
+        // const focusY = focusAreaChaserPos.y - focusAreaChaserHeight.val / 2;
+        // const focusW = focusAreaChaserWidth.val;
+        // const focusH = focusAreaChaserHeight.val;
 
-        focusAreaChaserWidth.update(width, dt);
-        focusAreaChaserHeight.update(height, dt);
-        focusAreaChaserPos.update({ x: offsetX, y: offsetY }, dt);
+        // // 2. Move the div wrapper (Optional, if you use it for CSS borders/effects)
+        // focusedArea.style.transform = `translate(${focusX}px, ${focusY}px)`;
+        // focusedArea.style.width = focusW + "px";
+        // focusedArea.style.height = focusH + "px";
 
-        const focusX = focusAreaChaserPos.x - focusAreaChaserWidth.val / 2;
-        const focusY = focusAreaChaserPos.y - focusAreaChaserHeight.val / 2;
-        const focusW = focusAreaChaserWidth.val;
-        const focusH = focusAreaChaserHeight.val;
+        const rect = contentStencil.getBoundingClientRect();
+        const focusX = rect.left;
+        const focusY = rect.top;
+        const focusW = rect.width;
+        const focusH = rect.height;
 
-        // 2. Move the div wrapper (Optional, if you use it for CSS borders/effects)
-        focusedArea.style.transform = `translate(${focusX}px, ${focusY}px)`;
-        focusedArea.style.width = focusW + "px";
-        focusedArea.style.height = focusH + "px";
-
+        console.log(focusX, focusY, focusW, focusH)
         sdfCanvas.draw({
             x: focusX,//offsetX - width / 2,
             y: focusY,//offsetY - height / 2,

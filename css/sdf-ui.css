@@ -22,7 +22,7 @@ sdf-text {
     --letterSmoothness: 0.1rem;
 }
 
-#background-box {
+#page-content-container {
     --z: 0rem;
     --depth: 100rem;
     --diffuse-color: var(--color-bg);
@@ -67,8 +67,8 @@ sdf-text {
 
 #title-text-twist-target {
     position: absolute;
-    top: calc(50% - 0.5rem);
-    left: calc(50% - 0.5rem);
+    top: calc(50%);
+    left: calc(50%);
     left: -21rem;
     --z: 9.25rem;
 
@@ -78,8 +78,8 @@ sdf-text {
     --twist-end: 21rem;
     --twist-start-offset: 180;
 
-    width: 1rem;
-    height: 1rem;
+    width: 0rem;
+    height: 0rem;
     background-color: rgba(255, 255, 255, 0.5);
 }
 
@@ -97,7 +97,7 @@ sdf-text {
 .title-text-twist-target-right {
     /* Apply the animation over 4 seconds, moving forwards */
     /* You can change "ease" to "linear" if you want a constant speed */
-    animation: slideRight 2s ease forwards;
+    animation: slideRight 1.5s cubic-bezier(0.504, 0.037, 0.853, 0.513) forwards;
 }
 
 .light {
@@ -125,4 +125,30 @@ sdf-text {
     --light-direction: -0.5 0.5 -1;
     --light-intensity: 0.5;
     --light-radius: 100rem;
+}
+
+
+/*
+    Used to pass color information into the background shader
+*/
+#light-3 {
+    --diffuse-color: var(--color-bg-dark);
+    top: 10rem;
+    left: 50%;
+    --z: 0rem;
+
+    --light-type: point;
+    --light-intensity: 0.5;
+    --light-radius: 0.2rem;
+}
+
+#light-4 {
+    --diffuse-color: var(--color-accent);
+    top: 10rem;
+    left: 50%;
+    --z: 0rem;
+
+    --light-type: point;
+    --light-intensity: 0.5;
+    --light-radius: 0.2rem;
 }
