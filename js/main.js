@@ -22,7 +22,7 @@ SdfCanvas.customElements = [];
 const loadStartTime = performance.now();
 
 const finalWidth = 0;
-const renderedPixelSize = 4;
+const renderedPixelSize = REM_PX / 4;
 const renderedPixelSizeBackground = renderedPixelSize;
 const sdfCanvas = new SdfCanvas("sdf-canvas", {
     onCompilationComplete: () => {
@@ -71,11 +71,31 @@ const sdfCanvas = new SdfCanvas("sdf-canvas", {
     backgroundSmoothScaling: false,
 });
 
-SdfCanvas.performForEachElement((e) => {
-    e.classList.add(COMPILING_CLASSNAME);
-})
+function setCanvasActive(active) {
+    if (active) {
+        if (!canvasInitialized) {
+            SdfCanvas.performForEachElement((e) => {
+                e.classList.add(COMPILING_CLASSNAME);
+            })
 
-sdfCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
+            sdfCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
+            canvasInitialized = true;
+        } else {
+            SdfCanvas.performForEachElement((e) => {
+                e.classList.remove(NO_SDF_CLASSNAME);
+            })
+        }
+    } else {
+        SdfCanvas.performForEachElement((e) => {
+            e.classList.add(NO_SDF_CLASSNAME);
+        })
+        sdfCanvas.clear();
+    }
+}
+
+let canvasActive = false;
+let canvasInitialized = false;
+setCanvasActive(canvasActive);
 
 const contentStencil = document.getElementById("content-stencil-canvas");
 const cursor = document.getElementById("cursor");
@@ -85,9 +105,18 @@ const fpsDiv = document.getElementById("fps");
 const titleText = document.getElementById("title-text");
 const titleTextTwistTarget = document.getElementById("title-text-twist-target");
 const titleTwistModifier = new Twist(titleTextTwistTarget, false);
+const cameraActiveToggle = document.getElementById("toggle-3d");
 
 let titleTwistAnimating = false;
 let titleClickQueued = false; // Stores if a click happened while animating
+
+cameraActiveToggle.addEventListener("click", () => {
+    canvasActive = !canvasActive;
+
+    cameraActiveToggle.content = cameraActiveToggle.content == "3d_2" ? "2d_2" : "3d_2";
+
+    setCanvasActive(canvasActive);
+})
 
 titleText.addEventListener("click", () => {
     if (!titleTextTwistTarget) return;
@@ -108,9 +137,7 @@ titleTextTwistTarget.addEventListener("animationend", () => {
     if (titleClickQueued) {
         titleClickQueued = false;
 
-        // Force a DOM reflow! 
-        // This makes the browser process the class removal above 
-        // before we add it back below, ensuring the animation restarts.
+        // Force a DOM reflow, so that animation restarts when the class is added back 
         void titleTextTwistTarget.offsetWidth;
 
         titleTextTwistTarget.classList.add("title-text-twist-target-right");
@@ -236,55 +263,56 @@ function update(time, dt) {
     pointerCircle.style.top = mouse.y + "px";
     pointerCircle.style.left = mouse.x + "px"; */
     //cursor.style.transform = `translate(${(chaser.x - cursorWidth)}px, ${(chaser.y - cursorHeight / 2)}px) rotate(${chaser.rotation}rad)`;
-    
+
     cursor.style.transform = `translate(${(mouse.x - cursorWidth / 2)}px, ${mouse.y - cursorHeight / 2}px)`;
 
-    SdfCanvas.update();
-    if (useFocus) {
-        // const rect = activeElement.getBoundingClientRect();
-        // const offsetX = (rect.left + rect.width * 0.5);
-        // const offsetY = (rect.top + rect.height * 0.5);
-        // // const offsetZ = this.twoDMode ? 0 : parseFloat(computedStyle.getPropertyValue("--z")) * oneOverX;
-        // 
-        // const width = rect.width + 5 * REM_PX;
-        // const height = rect.height + 5 * REM_PX;
-        // 
-        // focusAreaChaserWidth.update(width, dt);
-        // focusAreaChaserHeight.update(height, dt);
-        // focusAreaChaserPos.update({ x: offsetX, y: offsetY }, dt);
+    if (canvasActive) {
+        SdfCanvas.update();
+        if (useFocus) {
+            // const rect = activeElement.getBoundingClientRect();
+            // const offsetX = (rect.left + rect.width * 0.5);
+            // const offsetY = (rect.top + rect.height * 0.5);
+            // // const offsetZ = this.twoDMode ? 0 : parseFloat(computedStyle.getPropertyValue("--z")) * oneOverX;
+            // 
+            // const width = rect.width + 5 * REM_PX;
+            // const height = rect.height + 5 * REM_PX;
+            // 
+            // focusAreaChaserWidth.update(width, dt);
+            // focusAreaChaserHeight.update(height, dt);
+            // focusAreaChaserPos.update({ x: offsetX, y: offsetY }, dt);
 
-        // const focusX = focusAreaChaserPos.x - focusAreaChaserWidth.val / 2;
-        // const focusY = focusAreaChaserPos.y - focusAreaChaserHeight.val / 2;
-        // const focusW = focusAreaChaserWidth.val;
-        // const focusH = focusAreaChaserHeight.val;
+            // const focusX = focusAreaChaserPos.x - focusAreaChaserWidth.val / 2;
+            // const focusY = focusAreaChaserPos.y - focusAreaChaserHeight.val / 2;
+            // const focusW = focusAreaChaserWidth.val;
+            // const focusH = focusAreaChaserHeight.val;
 
-        // // 2. Move the div wrapper (Optional, if you use it for CSS borders/effects)
-        // focusedArea.style.transform = `translate(${focusX}px, ${focusY}px)`;
-        // focusedArea.style.width = focusW + "px";
-        // focusedArea.style.height = focusH + "px";
+            // // 2. Move the div wrapper (Optional, if you use it for CSS borders/effects)
+            // focusedArea.style.transform = `translate(${focusX}px, ${focusY}px)`;
+            // focusedArea.style.width = focusW + "px";
+            // focusedArea.style.height = focusH + "px";
 
-        const rect = contentStencil.getBoundingClientRect();
-        const focusX = rect.left;
-        const focusY = rect.top;
-        const focusW = rect.width;
-        const focusH = rect.height;
+            const rect = contentStencil.getBoundingClientRect();
+            const focusX = rect.left;
+            const focusY = rect.top;
+            const focusW = rect.width;
+            const focusH = rect.height;
 
-        console.log(focusX, focusY, focusW, focusH)
-        sdfCanvas.draw({
-            x: focusX,//offsetX - width / 2,
-            y: focusY,//offsetY - height / 2,
-            w: focusW,//width,
-            h: focusH,//height
-        });
-        //sdfCanvas.draw({
-        //    x: 100,//offsetX - width / 2,
-        //    y: 100,//offsetY - height / 2,
-        //    w: 500,//width,
-        //    h: 500,//height
-        //});
-    } else {
-        sdfCanvas.draw();
+            sdfCanvas.draw({
+                x: focusX,//offsetX - width / 2,
+                y: focusY,//offsetY - height / 2,
+                w: focusW,//width,
+                h: focusH,//height
+            });
+            //sdfCanvas.draw({
+            //    x: 100,//offsetX - width / 2,
+            //    y: 100,//offsetY - height / 2,
+            //    w: 500,//width,
+            //    h: 500,//height
+            //});
+        } else {
+            sdfCanvas.draw();
 
+        }
     }
 }
 

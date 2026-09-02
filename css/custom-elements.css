@@ -1,6 +1,44 @@
 /*╔══════════════════════════════════════════════════════════╗*/
 /*║                     Sdf push button                      ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
+.button-icon {
+    height: var(--header-item-height);
+    width: var(--header-item-height);
+
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: calc(var(--header-item-height) / 2);
+
+    line-height: 1 !important;
+    /* Removes invisible vertical space */
+    letter-spacing: normal;
+    /* Prevents horizontal shifting */
+}
+
+
+.sdf-push-button.no-sdf,
+.button-icon {
+    border: var(--border);
+    background-color: var(--color-bg);
+}
+
+.sdf-push-button:hover.no-sdf,
+.button-icon:hover {
+    background-color: var(--color-bg-hover);
+    cursor: pointer;
+}
+
+.sdf-push-button:active.no-sdf,
+.button-icon:active {
+    background-color: var(--color-bg-active);
+    cursor: pointer;
+}
+
+/*╔══════════════════════════════════════════════════════════╗*/
+/*║                     Sdf push button                      ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
 t-sdf-push-button {
     display: contents;
 }
@@ -14,13 +52,20 @@ t-sdf-push-button {
     display: flex !important;
     align-items: center;
     justify-content: center;
-
+    
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
     padding: var(--text-padding);
     padding: 0.75rem 2.5rem;
 
     --z: 10rem;
     transition: --z var(--transition-params), --diffuse-color var(--transition-params-long);
+}
+
+.sdf-push-button-hidden {
+    --z: -1rem;
 }
 
 .sdf-push-button:hover {
@@ -47,7 +92,6 @@ t-sdf-push-button {
     --z: 1rem;
     --diffuse-color: var(--color-accent);
 }
-
 
 /*╔══════════════════════════════════════════════════════════╗*/
 /*║                     Span with icon                       ║*/

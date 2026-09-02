@@ -1,26 +1,53 @@
-const toggleHeader = document.getElementById("toggle-header");
+const toggleHeaderButton = document.getElementById("toggle-header");
+const toggleThemeButton = document.getElementById("toggle-theme");
 const header = document.getElementById("header-link-container");
+const headerButtons = document.getElementsByClassName("header-button");
+const appearanceButtons = [
+    document.getElementById("toggle-3d"),
+    document.getElementById("toggle-theme"),
+];
 
-toggleHeader.addEventListener("click", () => {
-    console.log(toggleHeader.innerHTML)
-    toggleHeader.innerHTML = toggleHeader.innerHTML.trim() == "close" ? "menu" : "close";
-    console.log(toggleHeader.innerHTML)
-    header.classList.toggle("show-header");
-    header.classList.toggle("hide-header");
-});
+toggleHeaderButton.addEventListener("click", toggleHeader);
+
+function toggleHeader() {
+    setHeader(toggleHeaderButton.content != "close");
+}
+
+function setHeader(visible) {
+    toggleHeaderButton.content = visible ? "close" : "menu";
+
+    for (let i = 0; i < headerButtons.length; i++) {
+        headerButtons[i].setActive(visible);
+    }
+
+    for (let i = 0; i < appearanceButtons.length; i++) {
+        if (visible) {
+            appearanceButtons[i].classList.remove("display-none");
+        } else {
+            appearanceButtons[i].classList.add("display-none");
+        }
+    }
+
+    if (visible) {
+        header.classList.add("show-header");
+        header.classList.remove("hide-header");
+    } else {
+        header.classList.remove("show-header");
+        header.classList.add("hide-header");
+    }
+}
+
+toggleThemeButton.addEventListener("click", () => {
+    toggleThemeButton.content = toggleThemeButton.content == "light_mode" ? "dark_mode" : "light_mode";
+    document.body.classList.toggle("light-theme");
+})
 
 // Define the media query
-const mediaQuery = window.matchMedia("(max-width: 800px)");
+const mediaQuery = window.matchMedia("(max-width: 420px)");
 
 // Function to handle the change
 function handleDeviceChange(e) {
-    if (e.matches) {
-        header.classList.remove("show-header");
-        header.classList.add("hide-header");
-    } else {
-        header.classList.add("show-header");
-        header.classList.remove("hide-header");
-    }
+    setHeader(!e.matches)
 }
 
 // Listen for changes
@@ -28,10 +55,6 @@ mediaQuery.addEventListener("change", handleDeviceChange);
 
 // Run it once on page load to set the initial state
 handleDeviceChange(mediaQuery);
-
-document.addEventListener("click", (e) => {
-    console.log(e.target)
-})
 
 function isMobilePhone() {
     // 1. Try the modern Client Hints API first (Fastest & most accurate)

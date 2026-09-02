@@ -13,8 +13,39 @@ function addCss(fileName) {
 
 addCss("../css/custom-elements.css")
 
+class TIconButton extends HTMLElement {
+    #content;
+    #id;
+
+    connectedCallback() {
+        this.#id = this.getAttribute("id");
+        this.#content = this.getAttribute("content");
+
+        this.innerHTML = TIconButton.generateInnerHtml(this.#id, this.#content);
+    }
+
+    get content() {
+        return this.#content;
+    }
+
+    set content(val) {
+        this.#content = val;
+        this.innerHTML = TIconButton.generateInnerHtml(this.#id, val);
+    }
+
+    static generateInnerHtml(id, content) {
+        return `<button id="${id}" class="button-icon material-symbols-rounded">${content}</button>`;
+    }
+}
+
+customElements.define("t-icon-button", TIconButton);
+
 
 class TSdfButton extends HTMLElement {
+    #sdfElement;
+    #negativeSdfElement;
+    #releaseTimeout;
+
     connectedCallback() {
         const content = this.getAttribute("content");
         const sdfClass = this.getAttribute("sdf-element-class");
@@ -32,8 +63,9 @@ class TSdfButton extends HTMLElement {
         `;
 
         const link = this.querySelector("#sdf-button-link");
-        const negativeElement = this.querySelector("#sdf-button-negative");
-        negativeElement.active = false;
+        this.#sdfElement = this.querySelector(".sdf-push-button");
+        this.#negativeSdfElement = this.querySelector("#sdf-button-negative");
+        this.#negativeSdfElement.active = false;
 
         this.addEventListener("click", (e) => {
             if (!link || linkHref == "") {
@@ -47,32 +79,54 @@ class TSdfButton extends HTMLElement {
             }
         });
 
-        let releaseTimeout;
+        const handlePress = (e) => {
+            if (!this.#negativeSdfElement) return;
 
-        const handlePress = () => {
-            if (!negativeElement) return;
+            clearTimeout(this.#releaseTimeout);
+            this.#negativeSdfElement.active = true;
 
-            clearTimeout(releaseTimeout);
-            negativeElement.active = true;
+            if (e.type === "mousedown") {
+                document.addEventListener("mouseup", handleRelease);
+            }
         };
 
         const handleRelease = () => {
-            if (!negativeElement) return;
-            releaseTimeout = setTimeout(() => {
-                negativeElement.active = false;
-            }, 500);
+            if (!this.#negativeSdfElement) return;
+            this.#releaseTimeout = setTimeout(() => {
+                this.#negativeSdfElement.active = false;
+            }, 200);
         };
 
         this.addEventListener("mousedown", handlePress);
-        this.addEventListener("mouseup", handleRelease);
-
-        // Crucial: Handle case where user clicks down, drags mouse off the button, and releases
-        this.addEventListener("mouseleave", handleRelease);
+        // this.addEventListener("mouseup", handleRelease);
 
         // Touch events for mobile compatibility
         this.addEventListener("touchstart", handlePress, { passive: true });
         this.addEventListener("touchend", handleRelease);
         this.addEventListener("touchcancel", handleRelease);
+    }
+
+    setActive(active) {
+        if (!this.#sdfElement || !this.#negativeSdfElement) {
+            return;
+        }
+
+        clearTimeout(this.#releaseTimeout);
+        this.#releaseTimeout = setTimeout(() => {
+            if (!active) {
+                this.#sdfElement.active = false;
+            }
+        }, 200);
+
+        if (active) {
+            this.#sdfElement.active = true;
+            this.#sdfElement.classList.remove("sdf-push-button-hidden");
+
+        } else {
+            this.#sdfElement.classList.add("sdf-push-button-hidden");
+
+            this.#negativeSdfElement.active = false;
+        }
 
     }
 }

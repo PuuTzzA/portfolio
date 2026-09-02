@@ -128,27 +128,11 @@ sdf-text {
 }
 
 
-/*
-    Used to pass color information into the background shader
-*/
+/* Used to pass color information into the background shader */
 #light-3 {
     --diffuse-color: var(--color-bg-dark);
-    top: 10rem;
-    left: 50%;
-    --z: 0rem;
-
-    --light-type: point;
-    --light-intensity: 0.5;
-    --light-radius: 0.2rem;
 }
 
 #light-4 {
     --diffuse-color: var(--color-accent);
-    top: 10rem;
-    left: 50%;
-    --z: 0rem;
-
-    --light-type: point;
-    --light-intensity: 0.5;
-    --light-radius: 0.2rem;
 }
