@@ -43,7 +43,7 @@ toggleThemeButton.addEventListener("click", () => {
 })
 
 // Define the media query
-const mediaQuery = window.matchMedia("(max-width: 420px)");
+const mediaQuery = window.matchMedia("(max-width: 30em)");
 
 // Function to handle the change
 function handleDeviceChange(e) {

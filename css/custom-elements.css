@@ -4,6 +4,7 @@
 .button-icon {
     height: var(--header-item-height);
     width: var(--header-item-height);
+    padding: 0;
 
     display: flex !important;
     align-items: center;
