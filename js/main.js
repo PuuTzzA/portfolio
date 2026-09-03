@@ -32,6 +32,8 @@ const sdfCanvas = new SdfCanvas("sdf-canvas", {
             e.classList.remove(COMPILING_CLASSNAME);
             e.classList.remove(NO_SDF_CLASSNAME);
         })
+        canvasInitialized = true;
+        canvasCompiling = false;
     },
     canvas: {
         renderLayers: [0, 1],
@@ -72,14 +74,17 @@ const sdfCanvas = new SdfCanvas("sdf-canvas", {
 });
 
 function setCanvasActive(active) {
+    if (canvasCompiling) {
+        return;
+    }
     if (active) {
         if (!canvasInitialized) {
+            canvasCompiling = true;
             SdfCanvas.performForEachElement((e) => {
                 e.classList.add(COMPILING_CLASSNAME);
             })
 
             sdfCanvas.initWebgl(SdfCanvas.COMPILE_POLICY_ALSO_BLOCKING);
-            canvasInitialized = true;
         } else {
             SdfCanvas.performForEachElement((e) => {
                 e.classList.remove(NO_SDF_CLASSNAME);
@@ -95,6 +100,7 @@ function setCanvasActive(active) {
 
 let canvasActive = false;
 let canvasInitialized = false;
+let canvasCompiling = false;
 setCanvasActive(canvasActive);
 
 const contentStencil = document.getElementById("content-stencil-canvas");
@@ -111,6 +117,10 @@ let titleTwistAnimating = false;
 let titleClickQueued = false; // Stores if a click happened while animating
 
 cameraActiveToggle.addEventListener("click", () => {
+    if (canvasCompiling) {
+        return;
+    }
+
     canvasActive = !canvasActive;
 
     cameraActiveToggle.content = cameraActiveToggle.content == "3d_2" ? "2d_2" : "3d_2";

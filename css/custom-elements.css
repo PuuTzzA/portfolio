@@ -102,6 +102,7 @@ t-sdf-push-button {
     align-items: center;
     gap: var(--size-xs);
     height: var(--size-m);
+    height: auto;
 }
 
 .span-with-icon-between {

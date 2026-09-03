@@ -272,7 +272,7 @@ body {
 }
 
 /*╔══════════════════════════════════════════════════════════╗*/
-/*║                         Title                            ║*/
+/*║                         About                            ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
 #title-text {
     white-space: nowrap;
@@ -299,13 +299,15 @@ body {
     justify-content: space-between;
     grid-template-columns: 1fr 1fr;
     margin-top: var(--size-xl);
+    padding-right: 0.5rem;
 }
 
 .about-section-info {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-    gap: var(--size-m);
+    gap: var(--size-s);
+    height: auto;
 }
 
 .main-info {
@@ -317,7 +319,7 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: var(--size-l);
+    gap: var(--size-m);
 }
 
 .personal-info {
@@ -340,42 +342,39 @@ body {
     padding: 1rem;
     /* Masks require a height! */
     justify-self: end;
+
+    background-color: var(--color-text);
+
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+}
+
+.icon-link:hover {
+    cursor: pointer;
 }
 
 .mail-icon {
-    background-color: var(--color-text);
     mask-image: url("../assets/icons/Gmail.svg");
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
     -webkit-mask-image: url("../assets/icons/Gmail.svg");
-    -webkit-mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
 }
 
 .github-icon {
-    background-color: var(--color-text);
     mask-image: url("../assets/icons/GitHub.svg");
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
     -webkit-mask-image: url("../assets/icons/GitHub.svg");
-    -webkit-mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
 }
 
 .youtube-icon {
-    background-color: var(--color-text);
     mask-image: url("../assets/icons/YouTube.svg");
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
     -webkit-mask-image: url("../assets/icons/YouTube.svg");
-    -webkit-mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
+}
+
+.cv-icon {
+    mask-image: url("../assets/icons/CV.svg");
+    -webkit-mask-image: url("../assets/icons/CV.svg");
 }
 
 /*╔══════════════════════════════════════════════════════════╗*/
@@ -490,6 +489,7 @@ body {
 /*║                      Media Queries                       ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
 @media (max-width: 100em) {
+
     #page-content-container,
     #content-stencil-canvas {
         width: 100%;
