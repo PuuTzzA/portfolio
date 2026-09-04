@@ -19,7 +19,12 @@ SdfCanvas.layers = [
 ];
 SdfCanvas.topFace = true;
 SdfCanvas.customElements = [];
-SdfCanvas.addTrackedNonSdfElement(document.getElementById("timeline-header"))
+SdfCanvas.addTrackedNonSdfElement(document.getElementById("timeline-header"));
+SdfCanvas.addTrackedNonSdfElement(document.getElementById("header-link-container"));
+const sectionSpacers = document.getElementsByClassName("section-container-spacer");
+for (let i = 0; i < sectionSpacers.length; i++) {
+    SdfCanvas.addTrackedNonSdfElement(sectionSpacers[i]);
+}
 const loadStartTime = performance.now();
 
 const finalWidth = 0;

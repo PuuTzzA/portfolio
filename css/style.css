@@ -49,7 +49,8 @@
     --transition-params-ease: 0.2s ease-in-out;
     --transition-params-long: 0.3s cubic-bezier(0.3, 0.8, 0.2, 1.3);
 
-    --total-header-height: calc(var(--header-item-height) + 2 * var(--size-l));
+    --total-header-height-no-sdf: calc(var(--header-item-height) + 2 * var(--size-l));
+    --total-header-height: calc(var(--header-item-height) + var(--size-l) + var(--size-xl));
 
     /* Colors */
     /* lighness [0, 1], chroma (saturation) [0, 0.4], hue [0°, 360°]*/
@@ -278,6 +279,10 @@ body {
     top: calc(-1 * var(--total-header-height))
 }
 
+.section-container-spacer.no-sdf {
+    top: calc(-1 * var(--total-header-height-no-sdf))
+}
+
 /*╔══════════════════════════════════════════════════════════╗*/
 /*║                         About                            ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
@@ -487,15 +492,20 @@ body {
 
 @media (max-width: 60em) {
     :root {
-        --total-header-height: calc(2 * var(--header-item-height) + var(--size-m) + 2 * var(--size-l));
+        --total-header-height-no-sdf: calc(2 * var(--header-item-height) + var(--size-m) + 2 * var(--size-l));
+        --total-header-height: calc(2 * var(--header-item-height) + var(--size-l) + 2 * var(--size-xl));
     }
 
     #header-link-container {
         grid-template-columns: repeat(2, 1fr);
         position: absolute;
         top: 0;
-        gap: var(--size-m);
+        gap: var(--size-xl);
         right: calc(var(--header-item-height) + 2 * var(--size-l))
+    }
+
+    #header-link-container.no-sdf {
+        gap: var(--size-m);
     }
 }
 
@@ -508,6 +518,7 @@ body {
 
 @media (max-width: 30em) {
     :root {
+        --total-header-height-no-sdf: var(--size-l);
         --total-header-height: var(--size-l);
     }
 
@@ -515,8 +526,12 @@ body {
         grid-template-columns: 1fr;
         position: absolute;
         top: 0;
-        gap: var(--size-m);
+        gap: var(--size-xl);
         right: calc(var(--header-item-height) + 2 * var(--size-l))
+    }
+
+    #header-link-container.no-sdf{
+        gap: var(--size-m);
     }
 
     .section-container {
