@@ -1,10 +1,13 @@
+const DISPLAY_NONE_CLASSNAME = "display-none";
+
+// Header
 const toggleHeaderButton = document.getElementById("toggle-header");
 const toggleThemeButton = document.getElementById("toggle-theme");
 const header = document.getElementById("header-link-container");
 const headerButtons = document.getElementsByClassName("header-button");
 const appearanceButtons = [
     document.getElementById("toggle-3d"),
-    document.getElementById("toggle-theme"),
+    toggleThemeButton,
 ];
 
 toggleHeaderButton.addEventListener("click", toggleHeader);
@@ -22,9 +25,9 @@ function setHeader(visible) {
 
     for (let i = 0; i < appearanceButtons.length; i++) {
         if (visible) {
-            appearanceButtons[i].classList.remove("display-none");
+            appearanceButtons[i].classList.remove(DISPLAY_NONE_CLASSNAME);
         } else {
-            appearanceButtons[i].classList.add("display-none");
+            appearanceButtons[i].classList.add(DISPLAY_NONE_CLASSNAME);
         }
     }
 
@@ -42,18 +45,82 @@ toggleThemeButton.addEventListener("click", () => {
     document.body.classList.toggle("light-theme");
 })
 
-// Define the media query
-const mediaQuery = window.matchMedia("(max-width: 30em)");
+function onHeaderButtonClicked() {
+    if (windowSizeSmall) {
+        setHeader(false);
+    }
+}
 
-// Function to handle the change
+for (let i = 0; i < headerButtons.length; i++) {
+    headerButtons[i].addEventListener("click", onHeaderButtonClicked);
+}
+
+// Timeline
+const timelineEducation = document.getElementById("timeline-content-education");
+const timelineExperience = document.getElementById("timeline-content-experience");
+const educationButton = document.getElementById("timeline-education-button");
+const experienceButton = document.getElementById("timeline-experience-button");
+
+educationButton.addEventListener("click", () => {
+    console.log("LKASJDF");
+    switchTimeline(true);
+})
+
+experienceButton.addEventListener("click", () => {
+    switchTimeline(false);
+})
+
+let currentTimelineEducation = undefined;
+function switchTimeline(shouldTimelineEducaiton) {
+    if (shouldTimelineEducaiton == currentTimelineEducation) {
+        return;
+    }
+
+    currentTimelineEducation = shouldTimelineEducaiton;
+
+    if (currentTimelineEducation) {
+        educationButton.setSelected(true);
+        experienceButton.setSelected(false);
+
+        timelineExperience.classList.remove("active");
+        timelineExperience.classList.add("hidden");
+        timelineEducation.classList.remove("hidden");
+        timelineEducation.classList.add("active");
+    } else {
+        educationButton.setSelected(false);
+        experienceButton.setSelected(true);
+
+        timelineExperience.classList.remove("hidden");
+        timelineExperience.classList.add("active");
+        timelineEducation.classList.remove("active");
+        timelineEducation.classList.add("hidden");
+    }
+}
+
+switchTimeline(true);
+
+
+
+
+
+
+
+
+
+
+
+
+// Media Queries
+const mediaQuery = window.matchMedia("(max-width: 30em)");
+let windowSizeSmall = undefined;
+
 function handleDeviceChange(e) {
+    windowSizeSmall = e.matches;
     setHeader(!e.matches)
 }
 
-// Listen for changes
 mediaQuery.addEventListener("change", handleDeviceChange);
 
-// Run it once on page load to set the initial state
 handleDeviceChange(mediaQuery);
 
 function isMobilePhone() {

@@ -53,6 +53,10 @@ sdf-text {
     --diffuse-color: var(--color-accent);
 }
 
+.timeline-header-items.selected {
+    --diffuse-color: var(--color-bg-selected);
+}
+
 .header-link-sdf-negative-box {
     --diffuse-color: var(--color-bg-light);
 }

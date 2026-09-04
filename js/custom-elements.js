@@ -40,7 +40,6 @@ class TIconButton extends HTMLElement {
 
 customElements.define("t-icon-button", TIconButton);
 
-
 class TSdfButton extends HTMLElement {
     #sdfElement;
     #negativeSdfElement;
@@ -129,6 +128,18 @@ class TSdfButton extends HTMLElement {
         }
 
     }
+
+    setSelected(selected) {
+        if (!this.#sdfElement) {
+            return;
+        }
+
+        if (selected) {
+            this.#sdfElement.classList.add("selected");
+        } else {
+            this.#sdfElement.classList.remove("selected");
+        }
+    }
 }
 
 customElements.define("t-sdf-push-button", TSdfButton)
@@ -139,13 +150,14 @@ class TSpanWithIcon extends HTMLElement {
         const icon = this.getAttribute("icon");
         const content = this.getAttribute("content");
         const spaceBetween = this.getAttribute("space-between");
+        const contentClass = this.getAttribute("content-class");
 
         this.innerHTML = `
             <span class="span-with-icon ${spaceBetween == "true" ? "span-with-icon-between" : ""}">
                 ${title != "" ? "<span class=\"span-with-icon-title text\">" + title + "</span>" : ""}
                 <span class="span-with-icon-content">
                     <span class="material-symbols-rounded text-muted">${icon}</span>
-                    <span class="text-muted">${content}</span>
+                    <span class="text-muted ${contentClass}">${content}</span>
                 </span>
             </span>
         `;
@@ -166,17 +178,17 @@ class TTimelineEntry extends HTMLElement {
 
         this.innerHTML = `
             <div class="timeline-date text">
-                <div>
-                    <span class="text-muted">${fromMonth}</span> ${fromYear}
-                </div>
-                <div>
+                <div class="timeline-date-group">
                     <span class="text-muted">${toMonth}</span> ${toYear}
+                </div>
+                <div class="timeline-date-group">
+                    <span class="text-muted">${fromMonth}</span> ${fromYear}
                 </div>
             </div>
             <div class="timeline-dot"></div>
             <div class="timeline-card text">
                 <t-span-with-icon title="${title}" icon="location_on"
-                    content="${location}" space-between="true"></t-span-with-icon>
+                    content="${location}" space-between="true" content-class="timeline-location-text"></t-span-with-icon>
                 <div class="text-muted">${content}</div>
             </div>
         `;

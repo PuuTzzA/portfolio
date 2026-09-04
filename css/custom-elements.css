@@ -1,5 +1,5 @@
 /*╔══════════════════════════════════════════════════════════╗*/
-/*║                     Sdf push button                      ║*/
+/*║                       Icon Button                        ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
 .button-icon {
     height: var(--header-item-height);
@@ -17,7 +17,6 @@
     letter-spacing: normal;
     /* Prevents horizontal shifting */
 }
-
 
 .sdf-push-button.no-sdf,
 .button-icon {
@@ -53,7 +52,7 @@ t-sdf-push-button {
     display: flex !important;
     align-items: center;
     justify-content: center;
-    
+
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
@@ -63,6 +62,10 @@ t-sdf-push-button {
 
     --z: 10rem;
     transition: --z var(--transition-params), --diffuse-color var(--transition-params-long);
+}
+
+.sdf-push-button.selected.no-sdf {
+    background-color: var(--color-bg-selected);
 }
 
 .sdf-push-button-hidden {
@@ -134,20 +137,13 @@ t-timeline-entry {
     gap: var(--size-s);
 }
 
-.timeline-date * {
-    height: var(--size-m);
-}
-
 .timeline-dot {
     grid-column: line;
     justify-self: center;
-    align-self: start;
 
     width: 0.75rem;
     height: 0.75rem;
-    top: 0.125rem;
     background-color: var(--color-text);
-    /* Contrast color to stand out from line */
     border-radius: 50%;
 
     position: relative;
@@ -159,4 +155,8 @@ t-timeline-entry {
     display: flex;
     flex-direction: column;
     gap: var(--size-s);
+}
+
+.timeline-location-text {
+    text-align: right;
 }

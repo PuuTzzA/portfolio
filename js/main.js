@@ -19,6 +19,7 @@ SdfCanvas.layers = [
 ];
 SdfCanvas.topFace = true;
 SdfCanvas.customElements = [];
+SdfCanvas.addTrackedNonSdfElement(document.getElementById("timeline-header"))
 const loadStartTime = performance.now();
 
 const finalWidth = 0;
@@ -353,7 +354,7 @@ function focusableOnMouseOut(e) {
 
 function pushButtonMouseIn(e) {
     cursor.classList.add("cursor-away");
-    console.log("MOIN")
+    // console.log("MOIN")
 }
 
 function pushButtonMouseOut(e) {
