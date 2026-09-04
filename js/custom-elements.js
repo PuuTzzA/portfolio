@@ -170,11 +170,12 @@ class TTimelineEntry extends HTMLElement {
     connectedCallback() {
         const title = this.getAttribute("title");
         const location = this.getAttribute("location");
-        const content = this.getAttribute("content");
         const fromYear = this.getAttribute("from-year");
         const toYear = this.getAttribute("to-year");
         const fromMonth = this.getAttribute("from-month");
         const toMonth = this.getAttribute("to-month");
+
+        const content = this.innerHTML;
 
         this.innerHTML = `
             <div class="timeline-date text">
