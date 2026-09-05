@@ -65,13 +65,15 @@
 
     --color-text: oklch(0.96 0 0);
     --color-text-muted: oklch(0.76 0 0);
+    --color-text-extra-muted: oklch(0.3 0 0);
     --color-highlight: oklch(0.5 0 0);
 
     --color-accent: rgb(255, 42, 0);
 
     --color-border: oklch(0.3578 0.0074 285.87);
     --border: 1px solid var(--color-border);
-    --border-muted: oklch(0.3 0 0);
+    --color-border-muted: oklch(0.2 0 0);
+    --border-muted: 1px solid var(--color-border-muted);
 
     --primary: oklch(0.76 0.1 307);
     --secondary: oklch(0.76 0.1 127);
@@ -96,12 +98,15 @@ body.light-theme {
 
     --color-text: oklch(0.15 0.0021 286.15);
     --color-text-muted: oklch(0.45 0.0021 286.15);
+    --color-text-extra-muted: oklch(0.7 0 0);
     --color-highlight: oklch(0.3 0.0021 286.15);
 
     --color-accent: rgb(220, 30, 0);
 
-    --color-border: oklch(0.80 0.005 285.87);
-    --border-muted: oklch(0.88 0.003 285.87);
+    --color-border: oklch(0.35 0.005 285.87);
+    --border: 1px solid var(--color-border);
+    --color-border-muted: oklch(0.80 0.005 285.87);
+    --border-muted: 1px solid var(--color-border-muted);
 
     --primary: oklch(0.55 0.15 307);
     --secondary: oklch(0.55 0.15 127);
@@ -400,15 +405,54 @@ body {
 /*║                         Skills                           ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
 .skills-content-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--size-m);
-    flex-direction: row;
-    width: 100%;
-    margin-bottom: 5rem;
-    height: auto;
+    column-count: 2;
 }
 
+.skills-category-container-outer {
+    border: var(--border-muted);
+    border-radius: calc(var(--header-item-height) / 2);
+    padding: var(--size-m);
+    margin-bottom: var(--size-m);
+
+    break-inside: avoid-column;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    transition: filter var(--transition-params-ease), opacity var(--transition-params-ease);
+}
+
+.skills-category-container {
+    display: flow-root;
+    margin: calc(var(--size-s) / -2);
+}
+
+.skills-category-container>* {
+    margin: calc(var(--size-s) / 2);
+}
+
+.skills-content-container:has(.skills-category-container-outer:hover) .skills-category-container-outer:not(:hover) {
+    filter: grayscale(1);
+    opacity: 0.25;
+}
+
+.skills-category-title-vertical,
+.skills-category-title-vertical-right {
+    float: left;
+    font-family: metaballs;
+    font-size: 5.5rem;
+    color: var(--color-text-extra-muted);
+
+    writing-mode: sideways-lr;
+    text-wrap: wrap;
+}
+
+.skills-category-title-vertical {
+    margin-left: -.5rem;
+}
+
+.skills-category-title-vertical-right {
+    float: right;
+    margin-right: -1.2rem;
+}
 
 /*╔══════════════════════════════════════════════════════════╗*/
 /*║                        Timeline                          ║*/
@@ -523,12 +567,27 @@ body {
     #header-link-container.no-sdf {
         gap: var(--size-m);
     }
+
+    .skills-category-title-vertical,
+    .skills-category-title-vertical-right {
+        writing-mode: horizontal-tb;
+        margin: 0;
+        margin: calc(var(--size-s) / 2);
+        margin-top: -0.7rem;
+        margin-bottom: -0.5rem;
+        width: 100%;
+        float: left;
+    }
 }
 
 @media (max-width: 45em) {
     .timeline-date-group .text-muted {
         display: block;
         /* Forces the year text onto a new line */
+    }
+
+    .skills-content-container {
+        column-count: 1;
     }
 }
 

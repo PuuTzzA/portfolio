@@ -149,8 +149,6 @@ class TSkillChip extends HTMLElement {
         const imgPath = this.getAttribute("img-path");
         const content = this.innerHTML;
 
-        console.log(imgPath)
-
         const imgHtml = imgPath != "" ? `<img src="${imgPath}" alt="${content + " logo"}" class="skill-img"></img>` : "";
 
         this.innerHTML = `

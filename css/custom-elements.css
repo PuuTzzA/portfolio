@@ -123,16 +123,21 @@ t-sdf-push-button {
 }
 
 /*╔══════════════════════════════════════════════════════════╗*/
-/*║                     Timeline entry                       ║*/
+/*║                       Skill Chip                         ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
+t-skill-chip {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .skill-container {
-    display: flex;
+    display: grid;
     align-items: center;
     grid-template-columns: auto auto;
     justify-content: center;
     width: max-content;
     height: var(--header-item-height);
-    gap: var(--size-m);
+    gap: calc(var(--size-s) * 1.5);
     border: var(--border);
     border-radius: calc(var(--header-item-height) / 2);
     background-color: var(--color-bg);
