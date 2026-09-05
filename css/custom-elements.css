@@ -58,7 +58,7 @@ t-sdf-push-button {
     user-select: none;
 
     padding: var(--text-padding);
-    padding: 0.75rem 2.5rem;
+    padding: 0 var(--size-xl);
 
     --z: 10rem;
     transition: --z var(--transition-params), --diffuse-color var(--transition-params-long);
@@ -120,6 +120,27 @@ t-sdf-push-button {
     display: flex;
     align-items: center;
     gap: var(--size-xs);
+}
+
+/*╔══════════════════════════════════════════════════════════╗*/
+/*║                     Timeline entry                       ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
+.skill-container {
+    display: flex;
+    align-items: center;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    width: max-content;
+    height: var(--header-item-height);
+    gap: var(--size-m);
+    border: var(--border);
+    border-radius: calc(var(--header-item-height) / 2);
+    background-color: var(--color-bg);
+    padding: 0 var(--size-m);
+}
+
+.skill-img {
+    height: var(--size-xl);
 }
 
 /*╔══════════════════════════════════════════════════════════╗*/

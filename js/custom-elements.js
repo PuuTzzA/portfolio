@@ -144,6 +144,26 @@ class TSdfButton extends HTMLElement {
 
 customElements.define("t-sdf-push-button", TSdfButton)
 
+class TSkillChip extends HTMLElement {
+    connectedCallback() {
+        const imgPath = this.getAttribute("img-path");
+        const content = this.innerHTML;
+
+        console.log(imgPath)
+
+        const imgHtml = imgPath != "" ? `<img src="${imgPath}" alt="${content + " logo"}" class="skill-img"></img>` : "";
+
+        this.innerHTML = `
+            <div class="skill-container text">
+                ${imgHtml}
+                <div>${content}</div>
+            </div>
+        `;
+    }
+}
+
+customElements.define("t-skill-chip", TSkillChip);
+
 class TSpanWithIcon extends HTMLElement {
     connectedCallback() {
         const title = this.getAttribute("title");

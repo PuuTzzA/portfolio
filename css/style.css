@@ -271,6 +271,7 @@ body {
     margin-bottom: var(--spacing-xs);
 
     container-type: inline-size;
+    height: max-content;
 }
 
 .section-container-spacer {
@@ -396,10 +397,25 @@ body {
 }
 
 /*╔══════════════════════════════════════════════════════════╗*/
+/*║                         Skills                           ║*/
+/*╚══════════════════════════════════════════════════════════╝*/
+.skills-content-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-m);
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 5rem;
+    height: auto;
+}
+
+
+/*╔══════════════════════════════════════════════════════════╗*/
 /*║                        Timeline                          ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
 #timeline-header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     justify-content: center;
     gap: var(--size-xl);
     margin-bottom: var(--size-xl);
@@ -423,7 +439,7 @@ body {
     grid-template-columns: [date] auto [line] auto [card] auto;
     gap: var(--size-m);
     row-gap: var(--size-l);
-    position: absolute;
+    position: relative;
     align-items: baseline;
     padding: var(--text-padding);
     /* transition: filter 0.0s ease, display 0.0s allow-discrete; */
@@ -530,7 +546,7 @@ body {
         right: calc(var(--header-item-height) + 2 * var(--size-l))
     }
 
-    #header-link-container.no-sdf{
+    #header-link-container.no-sdf {
         gap: var(--size-m);
     }
 

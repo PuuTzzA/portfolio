@@ -19,6 +19,10 @@ class TimeAverage {
     }
 
     update(time, data) {
+        if (!Number.isFinite(time) || !Number.isFinite(data)) {
+            return;
+        }
+
         // Update buffers
         this.#buffer[this.#newestIdx] = data;
         this.#timeBuffer[this.#newestIdx] = time;
