@@ -4,7 +4,6 @@ import { TimeAverage } from "./time-average.js";
 
 const CAMERA_Z = 10;
 const REM_PX = parseFloat(getComputedStyle(document.documentElement).fontSize);
-const FOCUSABLE_CLASSNAME = ""; //"focusable";
 const PUSH_BUTTON_CLASSNAME = "sdf-push-button";
 const COMPILING_CLASSNAME = "compiling";
 const NO_SDF_CLASSNAME = "no-sdf";
@@ -16,6 +15,7 @@ SdfCanvas.layers = [
     new SdfLayer(SdfCommands.SMOOTH_UNION, bgButtonSmoothness),       // the background box
     new SdfLayer(SdfCommands.SMOOTH_SUBTRACTION, bgButtonSmoothness), // push-buttons-negative-side
     new SdfLayer(SdfCommands.SMOOTH_UNION, 50),                       // the cursor
+    new SdfLayer(SdfCommands.SMOOTH_UNION, 50),
 ];
 SdfCanvas.topFace = true;
 SdfCanvas.customElements = [];
@@ -117,19 +117,19 @@ const fpsDiv = document.getElementById("fps");
 const titleText = document.getElementById("title-text");
 const titleTextTwistTarget = document.getElementById("title-text-twist-target");
 const titleTwistModifier = new Twist(titleTextTwistTarget, false);
-const cameraActiveToggle = document.getElementById("toggle-3d");
+const canvasActiveToggle = document.getElementById("toggle-3d");
 
 let titleTwistAnimating = false;
 let titleClickQueued = false; // Stores if a click happened while animating
 
-cameraActiveToggle.addEventListener("click", () => {
+canvasActiveToggle.addEventListener("click", () => {
     if (canvasCompiling) {
         return;
     }
 
     canvasActive = !canvasActive;
 
-    cameraActiveToggle.content = cameraActiveToggle.content == "3d_2" ? "2d_2" : "3d_2";
+    canvasActiveToggle.content = canvasActiveToggle.content == "3d_2" ? "2d_2" : "3d_2";
 
     setCanvasActive(canvasActive);
 })
@@ -167,6 +167,7 @@ titleText.addModifier(titleTwistModifier);
 
 
 const pointerCircle = document.getElementById("vis");
+
 
 const focusedArea = document.getElementById("focused-area");
 
@@ -212,7 +213,9 @@ const chaser = new Chaser({
 
 
 const useFocus = true;
-let activeElement = cursor;
+const skillSetionsSdfElement = document.getElementById("skills-highlight-box");
+const skillsContainer = document.getElementById("skills-content-container");
+let hoveredSkillContainer = document.getElementById("skills-category-default");
 
 const focusAreaChaserPos = new Chaser({
     // internal state
@@ -282,30 +285,35 @@ function update(time, dt) {
 
     cursor.style.transform = `translate(${(mouse.x - cursorWidth / 2)}px, ${mouse.y - cursorHeight / 2}px)`;
 
+    if (true) {
+        const parentRect = skillsContainer.getBoundingClientRect();
+        const rect = hoveredSkillContainer.getBoundingClientRect();
+
+        const relativeLeft = rect.left - parentRect.left;
+        const relativeTop = rect.top - parentRect.top;
+
+        // 3. Compute the center offset using the relative coordinates
+        const offsetX = relativeLeft + (rect.width * 0.5);
+        const offsetY = relativeTop + (rect.height * 0.5);
+
+        focusAreaChaserWidth.update(rect.width, dt);
+        focusAreaChaserHeight.update(rect.height, dt);
+        focusAreaChaserPos.update({ x: offsetX, y: offsetY }, dt);
+
+        const focusX = focusAreaChaserPos.x - focusAreaChaserWidth.val / 2;
+        const focusY = focusAreaChaserPos.y - focusAreaChaserHeight.val / 2;
+        const focusW = focusAreaChaserWidth.val;
+        const focusH = focusAreaChaserHeight.val;
+
+        // 2. Move the div wrapper (Optional, if you use it for CSS borders/effects)
+        skillSetionsSdfElement.style.transform = `translate(${focusX}px, ${focusY}px)`;
+        skillSetionsSdfElement.style.width = focusW + "px";
+        skillSetionsSdfElement.style.height = focusH + "px";
+    }
+
     if (canvasActive) {
         SdfCanvas.update();
         if (useFocus) {
-            // const rect = activeElement.getBoundingClientRect();
-            // const offsetX = (rect.left + rect.width * 0.5);
-            // const offsetY = (rect.top + rect.height * 0.5);
-            // // const offsetZ = this.twoDMode ? 0 : parseFloat(computedStyle.getPropertyValue("--z")) * oneOverX;
-            // 
-            // const width = rect.width + 5 * REM_PX;
-            // const height = rect.height + 5 * REM_PX;
-            // 
-            // focusAreaChaserWidth.update(width, dt);
-            // focusAreaChaserHeight.update(height, dt);
-            // focusAreaChaserPos.update({ x: offsetX, y: offsetY }, dt);
-
-            // const focusX = focusAreaChaserPos.x - focusAreaChaserWidth.val / 2;
-            // const focusY = focusAreaChaserPos.y - focusAreaChaserHeight.val / 2;
-            // const focusW = focusAreaChaserWidth.val;
-            // const focusH = focusAreaChaserHeight.val;
-
-            // // 2. Move the div wrapper (Optional, if you use it for CSS borders/effects)
-            // focusedArea.style.transform = `translate(${focusX}px, ${focusY}px)`;
-            // focusedArea.style.width = focusW + "px";
-            // focusedArea.style.height = focusH + "px";
 
             const rect = contentStencil.getBoundingClientRect();
             const focusX = rect.left;
@@ -346,11 +354,11 @@ function onMouseMove(e) {
 
 function focusableOnMouseIn(e) {
     let target = e.target;
-    while (!target.classList.contains(FOCUSABLE_CLASSNAME)) {
+    while (!target.classList.contains(SKILLS_CONTAINER_CLASSNAME)) {
         target = target.parentNode;
     }
 
-    activeElement = target;
+    hoveredSkillContainer = target;
 }
 
 function focusableOnMouseOut(e) {
@@ -373,9 +381,10 @@ function pushButtonMouseOut(e) {
 window.addEventListener('mousemove', onMouseMove);
 window.addEventListener("resize", onResize)
 onResize();
-const focusables = document.getElementsByClassName(FOCUSABLE_CLASSNAME);
-for (let i = 0; i < focusables.length; i++) {
-    const focusable = focusables[i];
+const SKILLS_CONTAINER_CLASSNAME = "skills-category-container-outer";
+const skillsContainers = document.getElementsByClassName(SKILLS_CONTAINER_CLASSNAME);
+for (let i = 0; i < skillsContainers.length; i++) {
+    const focusable = skillsContainers[i];
     focusable.addEventListener("mouseover", focusableOnMouseIn);
     focusable.addEventListener("mouseout", focusableOnMouseOut);
 }

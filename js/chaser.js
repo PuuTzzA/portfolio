@@ -52,7 +52,7 @@ class SpringlikeProperty {
     }
 
     update(target, dt) {
-        if (!target || typeof target !== "number" || typeof dt !== "number" || dt <= 0) {
+        if (!target || !Number.isFinite(target) || !Number.isFinite(dt) || dt <= 0) {
             return;
         }
 
@@ -61,6 +61,9 @@ class SpringlikeProperty {
     }
 
     updateRelative(delta, dt) {
+        if (!Number.isFinite(delta) || !Number.isFinite(dt)) {
+            return;
+        }
         // Hooke's Law
         const f = (delta * this.stiffness) - (this.vel * this.damping);
         const a = f / this.mass;
@@ -322,7 +325,7 @@ class Chaser {
     }
 
     update(target, dt, time) {
-        if (!target || typeof target.x !== "number" || typeof target.y !== "number" || typeof dt !== "number" || dt <= 0) {
+        if (!target || !Number.isFinite(target.x) || !Number.isFinite(target.y) || !Number.isFinite(dt) || dt <= 0) {
             return;
         }
 

@@ -104,6 +104,18 @@ sdf-text {
     animation: slideRight 1.5s cubic-bezier(0.504, 0.037, 0.853, 0.513) forwards;
 }
 
+#skills-highlight-box {
+    --z: 10rem;
+    --depth: 1rem;
+    --diffuse-color: var(--color-bg-light);
+    /*     --specular-color: var(--color-accent);
+    --kd: 1;
+    --ka: 0;
+    --ks: 1;
+    --p: 500;
+ */
+}
+
 .light {
     position: absolute;
     top: 0;

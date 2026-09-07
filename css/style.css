@@ -23,7 +23,7 @@
     /* Structural things */
     --central-column-width: 55%;
     --central-column-max-width: 80rem;
-    --central-content-max-width: 60rem;
+    --central-content-min-width: 59rem;
     --header-item-height: 3rem;
 
     --text: 1rem "text-font";
@@ -65,14 +65,14 @@
 
     --color-text: oklch(0.96 0 0);
     --color-text-muted: oklch(0.76 0 0);
-    --color-text-extra-muted: oklch(0.3 0 0);
+    --color-text-extra-muted: oklch(0.35 0 0);
     --color-highlight: oklch(0.5 0 0);
 
     --color-accent: rgb(255, 42, 0);
 
-    --color-border: oklch(0.3578 0.0074 285.87);
+    --color-border: oklch(0.4 0.0074 285.87);
     --border: 1px solid var(--color-border);
-    --color-border-muted: oklch(0.2 0 0);
+    --color-border-muted: oklch(0.3 0 0);
     --border-muted: 1px solid var(--color-border-muted);
 
     --primary: oklch(0.76 0.1 307);
@@ -250,6 +250,7 @@ canvas {
     transform: translateX(-50%);
     width: var(--central-column-width);
     max-width: var(--central-column-max-width);
+    min-width: var(--central-content-min-width);
 }
 
 #page-content-container.no-sdf {
@@ -404,8 +405,9 @@ body {
 /*╔══════════════════════════════════════════════════════════╗*/
 /*║                         Skills                           ║*/
 /*╚══════════════════════════════════════════════════════════╝*/
-.skills-content-container {
+#skills-content-container {
     column-count: 2;
+    position: relative;
 }
 
 .skills-category-container-outer {
@@ -429,7 +431,7 @@ body {
     margin: calc(var(--size-s) / 2);
 }
 
-.skills-content-container:has(.skills-category-container-outer:hover) .skills-category-container-outer:not(:hover) {
+#skills-content-container:has(.skills-category-container-outer:hover) .skills-category-container-outer:not(:hover) {
     filter: grayscale(1);
     opacity: 0.25;
 }
@@ -452,6 +454,19 @@ body {
 .skills-category-title-vertical-right {
     float: right;
     margin-right: -1.2rem;
+}
+
+#skills-highlight-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: calc(var(--header-item-height) / 2);
+    pointer-events: none;
+    z-index: -1;
+}
+
+#skills-highlight-box.no-sdf{
+    background-color: var(--color-bg-light);
 }
 
 /*╔══════════════════════════════════════════════════════════╗*/
@@ -554,6 +569,7 @@ body {
     :root {
         --total-header-height-no-sdf: calc(2 * var(--header-item-height) + var(--size-m) + 2 * var(--size-l));
         --total-header-height: calc(2 * var(--header-item-height) + var(--size-l) + 2 * var(--size-xl));
+        --central-content-min-width: none;
     }
 
     #header-link-container {
@@ -586,7 +602,7 @@ body {
         /* Forces the year text onto a new line */
     }
 
-    .skills-content-container {
+    #skills-content-container {
         column-count: 1;
     }
 }
