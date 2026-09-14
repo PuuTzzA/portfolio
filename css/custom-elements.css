@@ -112,7 +112,7 @@ t-sdf-push-button {
     justify-content: space-between;
 }
 
-.span-with-icon-title {
+.span-with-prior-content {
     padding-right: var(--size-m);
 }
 

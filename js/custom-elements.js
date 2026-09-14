@@ -164,18 +164,19 @@ customElements.define("t-skill-chip", TSkillChip);
 
 class TSpanWithIcon extends HTMLElement {
     connectedCallback() {
-        const title = this.getAttribute("title");
         const icon = this.getAttribute("icon");
-        const content = this.getAttribute("content");
+        const iconText = this.getAttribute("icon-text");
         const spaceBetween = this.getAttribute("space-between");
-        const contentClass = this.getAttribute("content-class");
+        const iconTextClass = this.getAttribute("icon-text-class");
+
+        const content = this.innerHTML;
 
         this.innerHTML = `
             <span class="span-with-icon ${spaceBetween == "true" ? "span-with-icon-between" : ""}">
-                ${title != "" ? "<span class=\"span-with-icon-title text\">" + title + "</span>" : ""}
+                ${content != "" ? "<span class=\"span-with-prior-content text\">" + content + "</span>" : ""}
                 <span class="span-with-icon-content">
                     <span class="material-symbols-rounded text-muted">${icon}</span>
-                    <span class="text-muted ${contentClass}">${content}</span>
+                    <span class="text-muted ${iconTextClass}">${iconText}</span>
                 </span>
             </span>
         `;
@@ -206,8 +207,7 @@ class TTimelineEntry extends HTMLElement {
             </div>
             <div class="timeline-dot"></div>
             <div class="timeline-card text">
-                <t-span-with-icon title="${title}" icon="location_on"
-                    content="${location}" space-between="true" content-class="timeline-location-text"></t-span-with-icon>
+                <t-span-with-icon icon="location_on" icon-text="${location}" space-between="true" icon-text-class="timeline-location-text"><span style="font-weight:bold">${title}</span></t-span-with-icon>
                 <div class="text-muted">${content}</div>
             </div>
         `;
