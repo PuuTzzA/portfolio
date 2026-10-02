@@ -6,7 +6,7 @@ const toggleThemeButton = document.getElementById("toggle-theme");
 const header = document.getElementById("header-link-container");
 const headerButtons = document.getElementsByClassName("header-button");
 const appearanceButtons = [
-    document.getElementById("toggle-3d"),
+    document.getElementById("toggle-3d-container"),
     toggleThemeButton,
 ];
 
@@ -62,7 +62,6 @@ const educationButton = document.getElementById("timeline-education-button");
 const experienceButton = document.getElementById("timeline-experience-button");
 
 educationButton.addEventListener("click", () => {
-    console.log("LKASJDF");
     switchTimeline(true);
 })
 

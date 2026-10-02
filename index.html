@@ -28,7 +28,18 @@
 
     <div class="appearance-settings-container">
         <t-icon-button id="toggle-header" content="close"></t-icon-button>
-        <t-icon-button id="toggle-3d" content="3d_2"></t-icon-button>
+        <div id="toggle-3d-container">
+            <t-icon-button id="toggle-3d" content="3d_2"></t-icon-button>
+            <div id="toggle-3d-warning" class="text">
+                <div>
+                    Compilation can take up to 20 seconds.
+                </div>
+                <div id="toggle-3d-warning-explanation" class="text">
+                    Test
+                </div>
+            </div>
+            <div id="toggle-3d-highlight"></div>
+        </div>
         <t-icon-button id="toggle-theme" content="light_mode"></t-icon-button>
     </div>
 
@@ -59,7 +70,7 @@
                 <div class="about-section-info">
                     <div class="main-info text">M.Sc. Student of Informatics: Games Engineering</div>
                     <div class="personal-information-container text-muted">
-                        <t-span-with-icon icon="location_on" icon-text="Munich, Germany"
+                        <t-span-with-icon icon="location_on" icon-text="Munich, Ger; Beijing, PRC"
                             space-between="true"></t-span-with-icon>
                         <t-span-with-icon icon="bookmark" icon-text="Computer Simulations, Graphics & Vision"
                             space-between="false"></t-span-with-icon>

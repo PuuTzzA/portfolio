@@ -7,6 +7,7 @@ const REM_PX = parseFloat(getComputedStyle(document.documentElement).fontSize);
 const PUSH_BUTTON_CLASSNAME = "sdf-push-button";
 const COMPILING_CLASSNAME = "compiling";
 const NO_SDF_CLASSNAME = "no-sdf";
+const CANVAS_NAME = "sdf-canvas";
 
 const bgButtonSmoothness = 8;
 SdfCanvas.layers = [
@@ -30,7 +31,7 @@ const loadStartTime = performance.now();
 const finalWidth = 0;
 const renderedPixelSize = REM_PX / 4;
 const renderedPixelSizeBackground = renderedPixelSize;
-const sdfCanvas = new SdfCanvas("sdf-canvas", {
+const sdfCanvas = new SdfCanvas(CANVAS_NAME, {
     onCompilationComplete: () => {
         const loadTime = performance.now() - loadStartTime;
         console.log("compiled in: " + (loadTime / 60000).toFixed(4) + " minutes, (" + loadTime.toFixed(4) + "ms)");
@@ -40,6 +41,11 @@ const sdfCanvas = new SdfCanvas("sdf-canvas", {
         })
         canvasInitialized = true;
         canvasCompiling = false;
+
+        if (canvasActive && canvasActiveWarningActive) {
+            canvasActiveWarningActive = false;
+            canvasActiveToggleWarning.classList.add("display-none");
+        }
     },
     canvas: {
         renderLayers: [0, 1],
@@ -118,6 +124,22 @@ const titleText = document.getElementById("title-text");
 const titleTextTwistTarget = document.getElementById("title-text-twist-target");
 const titleTwistModifier = new Twist(titleTextTwistTarget, false);
 const canvasActiveToggle = document.getElementById("toggle-3d");
+const canvasActiveToggleWarning = document.getElementById("toggle-3d-warning");
+let canvasActiveWarningActive = true;
+
+
+const toggleWarningExplanation = document.getElementById("toggle-3d-warning-explanation");
+const canvas = document.getElementById(CANVAS_NAME);
+const gl = canvas.getContext("webgl2");
+if (gl != null) {
+    const parallelCompileExt = gl.getExtension("KHR_parallel_shader_compile");
+
+    toggleWarningExplanation.innerHTML = parallelCompileExt ?
+        "Your browser supports parallel shader compilation, so your browser should not freeze while compiling." :
+        "Your browser <span style=\"font-weight: bold;\">does not support</span> parallel shader compilation, so it is likely to freeze while compiling.";
+} else {
+    toggleWarningExplanation.innerHTML = "Error while checking for parallel shader compilation capabilities.";
+}
 
 let titleTwistAnimating = false;
 let titleClickQueued = false; // Stores if a click happened while animating
@@ -285,7 +307,7 @@ function update(time, dt) {
 
     cursor.style.transform = `translate(${(mouse.x - cursorWidth / 2)}px, ${mouse.y - cursorHeight / 2}px)`;
 
-    if (true) {
+    if (canvasActive) {
         const parentRect = skillsContainer.getBoundingClientRect();
         const rect = hoveredSkillContainer.getBoundingClientRect();
 
