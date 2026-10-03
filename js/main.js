@@ -72,7 +72,7 @@ const sdfCanvas = new SdfCanvas(CANVAS_NAME, {
                 vec3 accentColor = lightData[3 + 1].xyz;
                 ColorStop[] colors = ColorStop[](
                 //ColorStop(surface.colorDiffuse, 0.000000), ColorStop(vec3(0.0f), 1.0f));
-                ColorStop(bgColor, 0.000000), ColorStop(accentColor, 0.5), ColorStop(bgColor, 1.0f));
+                ColorStop(bgColor, 0.000000), ColorStop(accentColor, 0.35), ColorStop(bgColor, 0.7f), ColorStop(bgColor, 1.0f));
                 //ColorStop(vec3(0.0f), 0.000000), ColorStop(vec3(1.0f), 0.5), ColorStop(vec3(0.0f), 1.0f));
                 //ColorStop(vec3(0.000000f, 0.000000f, 0.015996f), 0.000000f), ColorStop(vec3(0.008023f, 0.002428f, 0.162029f), 0.300000f), ColorStop(vec3(0.590619f, 0.964686f, 0.428690f), 0.400000f), ColorStop(vec3(0.991102f, 0.031896f, 0.814847f), 0.600000f), ColorStop(vec3(1.000000f, 0.000000f, 0.001821f), 0.800000f), ColorStop(vec3(0.008023f, 0.002428f, 0.162029f), 0.900000f), ColorStop(vec3(0.000000f, 0.000000f, 0.015996f), 1.000000f));
 
@@ -135,7 +135,7 @@ if (gl != null) {
     const parallelCompileExt = gl.getExtension("KHR_parallel_shader_compile");
 
     toggleWarningExplanation.innerHTML = parallelCompileExt ?
-        "Your browser supports parallel shader compilation, so your browser should not freeze while compiling." :
+        "Your browser supports parallel shader compilation, so it should not freeze while compiling." :
         "Your browser <span style=\"font-weight: bold;\">does not support</span> parallel shader compilation, so it is likely to freeze while compiling.";
 } else {
     toggleWarningExplanation.innerHTML = "Error while checking for parallel shader compilation capabilities.";
