@@ -1,6 +1,47 @@
+import { toggle3dCallback, getParallelCompileString } from "./main.js";
+
 const DISPLAY_NONE_CLASSNAME = "display-none";
 
-// Header
+// ╔══════════════════════════════════════════════════════════╗
+// ║                    3d Toggle Button                      ║
+// ╚══════════════════════════════════════════════════════════╝
+const toggle3dContainer = document.getElementById("toggle-3d-container");
+const toggle3dHighlights = document.querySelectorAll(".toggle-3d-highlight");
+const toggleWarningExplanation = document.getElementById("toggle-3d-warning-explanation");
+const canvasActiveToggle = document.getElementById("toggle-3d");
+
+let currentAngle = 0;
+
+toggle3dContainer.addEventListener("mouseenter", () => {
+    currentAngle += 180;
+
+    toggle3dHighlights.forEach((el) => {
+        el.style.setProperty("--highlight-start", `${currentAngle}deg`);
+    });
+});
+
+toggleWarningExplanation.innerHTML = getParallelCompileString();
+canvasActiveToggle.addEventListener("click", () => {
+    if (toggle3dCallback()) {
+        const was2d = canvasActiveToggle.content == "3d_2";
+        canvasActiveToggle.content = was2d ? "2d_2" : "3d_2";
+
+        if (was2d) {
+            toggle3dHighlights.forEach((el) => {
+                el.classList.add(DISPLAY_NONE_CLASSNAME);
+            });
+        }
+        else {
+            toggle3dHighlights.forEach((el) => {
+                el.classList.remove(DISPLAY_NONE_CLASSNAME);
+            });
+        }
+    }
+})
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║                         Header                           ║
+// ╚══════════════════════════════════════════════════════════╝
 const toggleHeaderButton = document.getElementById("toggle-header");
 const toggleThemeButton = document.getElementById("toggle-theme");
 const header = document.getElementById("header-link-container");
@@ -55,7 +96,9 @@ for (let i = 0; i < headerButtons.length; i++) {
     headerButtons[i].addEventListener("click", onHeaderButtonClicked);
 }
 
-// Timeline
+// ╔══════════════════════════════════════════════════════════╗
+// ║                        Timeline                          ║
+// ╚══════════════════════════════════════════════════════════╝
 const timelineEducation = document.getElementById("timeline-content-education");
 const timelineExperience = document.getElementById("timeline-content-experience");
 const educationButton = document.getElementById("timeline-education-button");
@@ -99,17 +142,9 @@ function switchTimeline(shouldTimelineEducaiton) {
 switchTimeline(true);
 
 
-
-
-
-
-
-
-
-
-
-
-// Media Queries
+// ╔══════════════════════════════════════════════════════════╗
+// ║                     Media Queries                        ║
+// ╚══════════════════════════════════════════════════════════╝
 const mediaQuery = window.matchMedia("(max-width: 30em)");
 let windowSizeSmall = undefined;
 

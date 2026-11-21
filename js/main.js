@@ -108,7 +108,7 @@ function setCanvasActive(active) {
         })
         sdfCanvas.clear();
     }
-}
+};
 
 let canvasActive = false;
 let canvasInitialized = false;
@@ -123,38 +123,36 @@ const fpsDiv = document.getElementById("fps");
 const titleText = document.getElementById("title-text");
 const titleTextTwistTarget = document.getElementById("title-text-twist-target");
 const titleTwistModifier = new Twist(titleTextTwistTarget, false);
-const canvasActiveToggle = document.getElementById("toggle-3d");
 const canvasActiveToggleWarning = document.getElementById("toggle-3d-warning");
 let canvasActiveWarningActive = true;
 
+export function getParallelCompileString() {
+    const canvas = document.getElementById(CANVAS_NAME);
+    const gl = canvas.getContext("webgl2");
+    if (gl != null) {
+        const parallelCompileExt = gl.getExtension("KHR_parallel_shader_compile");
 
-const toggleWarningExplanation = document.getElementById("toggle-3d-warning-explanation");
-const canvas = document.getElementById(CANVAS_NAME);
-const gl = canvas.getContext("webgl2");
-if (gl != null) {
-    const parallelCompileExt = gl.getExtension("KHR_parallel_shader_compile");
-
-    toggleWarningExplanation.innerHTML = parallelCompileExt ?
-        "Your browser supports parallel shader compilation, so it should not freeze while compiling." :
-        "Your browser <span style=\"font-weight: bold;\">does not support</span> parallel shader compilation, so it is likely to freeze while compiling.";
-} else {
-    toggleWarningExplanation.innerHTML = "Error while checking for parallel shader compilation capabilities.";
+        return parallelCompileExt ?
+            "Your browser supports parallel shader compilation, so it should not freeze while compiling." :
+            "Your browser <span style=\"font-weight: bold;\">does not support</span> parallel shader compilation, so it is likely to freeze while compiling.";
+    } else {
+        return "Error while checking for parallel shader compilation capabilities.";
+    }
 }
 
 let titleTwistAnimating = false;
 let titleClickQueued = false; // Stores if a click happened while animating
 
-canvasActiveToggle.addEventListener("click", () => {
+export function toggle3dCallback() {
     if (canvasCompiling) {
-        return;
+        return false;
     }
 
     canvasActive = !canvasActive;
 
-    canvasActiveToggle.content = canvasActiveToggle.content == "3d_2" ? "2d_2" : "3d_2";
-
     setCanvasActive(canvasActive);
-})
+    return true;
+}
 
 titleText.addEventListener("click", () => {
     if (!titleTextTwistTarget) return;
@@ -189,7 +187,6 @@ titleText.addModifier(titleTwistModifier);
 
 
 const pointerCircle = document.getElementById("vis");
-
 
 const focusedArea = document.getElementById("focused-area");
 
@@ -232,7 +229,6 @@ const chaser = new Chaser({
     yMax: window.innerHeight + REM_PX,
     angularVelocityAbsMax: 1000,
 });
-
 
 const useFocus = true;
 const skillSetionsSdfElement = document.getElementById("skills-highlight-box");
