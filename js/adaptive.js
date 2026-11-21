@@ -1,14 +1,16 @@
 import { toggle3dCallback, getParallelCompileString } from "./main.js";
 
 const DISPLAY_NONE_CLASSNAME = "display-none";
+const mobile = isMobilePhone();
 
 // ╔══════════════════════════════════════════════════════════╗
 // ║                    3d Toggle Button                      ║
 // ╚══════════════════════════════════════════════════════════╝
 const toggle3dContainer = document.getElementById("toggle-3d-container");
 const toggle3dHighlights = document.querySelectorAll(".toggle-3d-highlight");
+const toggleWarningContainer = document.getElementById("toggle-3d-warning");
 const toggleWarningExplanation = document.getElementById("toggle-3d-warning-explanation");
-const canvasActiveToggle = document.getElementById("toggle-3d");
+const toggle3dButton = document.getElementById("toggle-3d");
 
 let currentAngle = 0;
 
@@ -21,10 +23,33 @@ toggle3dContainer.addEventListener("mouseenter", () => {
 });
 
 toggleWarningExplanation.innerHTML = getParallelCompileString();
-canvasActiveToggle.addEventListener("click", () => {
+
+if (mobile) {
+    toggleWarningContainer.classList.add("mobile");
+}
+let clickedOnce = false;
+let compiledOnce = false;
+
+function bodyClickedWarning(e) {
+    const inside = toggle3dButton.contains(e.target) || toggleWarningContainer.contains(e.target);
+    if (!inside) {
+        clickedOnce = false;
+        toggleWarningContainer.classList.remove("force-warning-open");
+        document.body.removeEventListener("click", bodyClickedWarning);
+    }
+}
+
+toggle3dButton.addEventListener("click", () => {
+    if (mobile && !clickedOnce && !compiledOnce) {
+        clickedOnce = true;
+        toggleWarningContainer.classList.add("force-warning-open");
+        document.body.addEventListener("click", bodyClickedWarning);
+        return;
+    }
     if (toggle3dCallback()) {
-        const was2d = canvasActiveToggle.content == "3d_2";
-        canvasActiveToggle.content = was2d ? "2d_2" : "3d_2";
+        const was2d = toggle3dButton.content == "3d_2";
+        toggle3dButton.content = was2d ? "2d_2" : "3d_2";
+        compiledOnce = true;
 
         if (was2d) {
             toggle3dHighlights.forEach((el) => {
@@ -168,10 +193,4 @@ function isMobilePhone() {
 
     // Uses regex to look for common mobile device keywords
     return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
-}
-
-if (isMobilePhone()) {
-    console.log("The user is definitely on a mobile device.");
-} else {
-    console.log("No mobile phone")
 }
