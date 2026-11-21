@@ -206,7 +206,7 @@ canvas {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: calc(100% + var(--size-s));
+    right: calc(100% + var(--size-m));
     width: 800%;
     z-index: -1;
     background-color: var(--color-bg-warning);
@@ -316,15 +316,15 @@ canvas {
         spin-gradient 5s linear infinite;
 
     opacity: 0.6;
-    transition: opacity 0.1s, --highlight-start 1s cubic-bezier(0.36, 0, 0.288, 0.998);
+    transition: opacity 0.1s ease-in-out, filter 0.25s ease-in-out, --highlight-start 1s cubic-bezier(0.36, 0, 0.288, 0.998);
 }
 
 .highlight-blur-narrow {
-    filter: blur(0.05rem);
+    filter: blur(0.01rem);
 }
 
 .highlight-blur-wide {
-    filter: blur(0.5rem);
+    filter: blur(0.2rem);
 }
 
 #toggle-3d-container:hover .toggle-3d-highlight {
@@ -332,11 +332,12 @@ canvas {
 }
 
 #toggle-3d-container:hover .highlight-blur-narrow {
-    filter: blur(0.15rem);
+    filter: blur(0.05rem);
 }
 
 #toggle-3d-container:hover .highlight-blur-wide {
-    filter: blur(0.7rem);
+    opacity: 0.75;
+    filter: blur(0.4rem);
 }
 
 .toggle-3d-highlight.disabled {
