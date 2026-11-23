@@ -1,7 +1,12 @@
 import { toggle3dCallback, getParallelCompileString } from "./main.js";
 
 const DISPLAY_NONE_CLASSNAME = "display-none";
-const mobile = isMobilePhone();
+let mobile = isMobilePhone();
+
+window.addEventListener("resize", () => {
+    mobile = isMobilePhone();
+    adapt3dToggleToMobile();
+});
 
 // ╔══════════════════════════════════════════════════════════╗
 // ║                    3d Toggle Button                      ║
@@ -24,9 +29,18 @@ toggle3dContainer.addEventListener("mouseenter", () => {
 
 toggleWarningExplanation.innerHTML = getParallelCompileString();
 
-if (mobile) {
-    toggleWarningContainer.classList.add("mobile");
+function adapt3dToggleToMobile() {
+    if (mobile) {
+        toggleWarningContainer.classList.add("mobile");
+
+        toggle3dHighlights.forEach((el) => {
+            el.classList.add(DISPLAY_NONE_CLASSNAME);
+        });
+    }
 }
+
+adapt3dToggleToMobile();
+
 let clickedOnce = false;
 let compiledOnce = false;
 
@@ -50,6 +64,10 @@ toggle3dButton.addEventListener("click", () => {
         const was2d = toggle3dButton.content == "3d_2";
         toggle3dButton.content = was2d ? "2d_2" : "3d_2";
         compiledOnce = true;
+
+        if (mobile) {
+            return;
+        }
 
         if (was2d) {
             toggle3dHighlights.forEach((el) => {
